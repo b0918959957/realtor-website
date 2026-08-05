@@ -18,12 +18,19 @@ export async function notifyEmail(enquiry: ContactEnquiry) {
   const email = process.env.CONTACT_EMAIL?.trim() || PROFILE.email;
   if (!email) return { sent: false, reason: "未設定收件信箱" };
 
+  // FormSubmit 會擋掉沒有來源標頭的請求，必須帶上網站網址
+  const siteUrl =
+    process.env.NEXT_PUBLIC_SITE_URL?.trim() ||
+    (process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : "http://localhost:3000");
+
   try {
     const response = await fetch(`https://formsubmit.co/ajax/${encodeURIComponent(email)}`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
-        Accept: "application/json"
+        Accept: "application/json",
+        Origin: siteUrl,
+        Referer: `${siteUrl}/`
       },
       body: JSON.stringify({
         _subject: `【網站來客】${enquiry.name}｜${enquiry.intent.map(intentLabel).join("、")}`,
