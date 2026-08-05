@@ -1,4 +1,5 @@
 import { buildEnquiryMessage } from "@/lib/line-notify";
+import { PROFILE } from "@/lib/profile";
 import {
   contactMethodLabel,
   contactTimeLabel,
@@ -11,11 +12,11 @@ import {
  * 透過 FormSubmit 把客戶詢問寄到指定信箱。
  * 這個服務不需要 API key，第一次收信時點一次啟用連結即可。
  *
- * 未設定 CONTACT_EMAIL 時直接跳過。
+ * 預設寄到 profile 裡的信箱，可用 CONTACT_EMAIL 覆蓋。
  */
 export async function notifyEmail(enquiry: ContactEnquiry) {
-  const email = process.env.CONTACT_EMAIL?.trim();
-  if (!email) return { sent: false, reason: "未設定 CONTACT_EMAIL" };
+  const email = process.env.CONTACT_EMAIL?.trim() || PROFILE.email;
+  if (!email) return { sent: false, reason: "未設定收件信箱" };
 
   try {
     const response = await fetch(`https://formsubmit.co/ajax/${encodeURIComponent(email)}`, {
