@@ -3,6 +3,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
+import ContactForm from "@/app/_components/ContactForm";
 import { PROFILE } from "@/lib/profile";
 
 const LINE_URL = PROFILE.social.line;
@@ -186,7 +187,7 @@ export default function SiteHome() {
 
   return (
     <div className="site-root">
-      <a className="skip-link" href="#booking">跳至預約諮詢</a>
+      <a className="skip-link" href="#contact">跳至聯絡我</a>
 
       <header className={`site-header${scrolled ? " scrolled" : ""}`}>
         <div className="container header-inner">
@@ -195,11 +196,23 @@ export default function SiteHome() {
             <a href="#service-area" onClick={closeNav}>服務區域</a>
             <a href="#achievements" onClick={closeNav}>我的戰績</a>
             <a href="#services" onClick={closeNav}>服務項目</a>
-            <a href="#booking" onClick={closeNav}>預約諮詢</a>
-            <Link className="btn btn-line nav-line-btn" href="/card/booking" onClick={closeNav}>線上預約</Link>
+            <a href="#contact" onClick={closeNav}>聯絡我</a>
+            <a
+              className="btn btn-line nav-line-btn"
+              href={LINE_URL}
+              target="_blank"
+              rel="noopener noreferrer"
+              onClick={closeNav}
+            >
+              <LineIcon size={18} />
+              加 LINE 諮詢
+            </a>
           </nav>
           <div className="header-cta">
-            <Link className="btn btn-line" href="/card/booking">線上預約</Link>
+            <a className="btn btn-line" href={LINE_URL} target="_blank" rel="noopener noreferrer">
+              <LineIcon size={18} />
+              加 LINE 諮詢
+            </a>
           </div>
           <button
             className={`nav-toggle${navOpen ? " open" : ""}`}
@@ -223,9 +236,9 @@ export default function SiteHome() {
                 用心對待每一次託付，替您找到最適合的新主人。深耕高雄市、屏東市房產市場，從買賣租賃到家具租賃、影音拍攝、稅務諮詢、簡易裝潢，一次為您搞定安家大小事。
               </p>
               <div className="hero-actions">
-                <Link className="btn btn-primary" href="/card/booking">
-                  立即線上預約
-                </Link>
+                <a className="btn btn-primary" href="#contact">
+                  免費諮詢・留下資料
+                </a>
                 <a className="btn btn-outline" href={`tel:${PROFILE.phoneRaw}`}>
                   <PhoneIcon />
                   {PROFILE.phone}
@@ -369,14 +382,14 @@ export default function SiteHome() {
           </div>
         </section>
 
-        {/* Booking */}
-        <section className="booking" id="booking">
+        {/* Contact */}
+        <section className="booking" id="contact">
           <div className="container booking-inner">
             <div className="booking-info">
-              <p className="section-eyebrow">BOOKING</p>
-              <h2 className="section-title">預約諮詢</h2>
+              <p className="section-eyebrow">CONTACT</p>
+              <h2 className="section-title">聯絡我</h2>
               <p className="section-desc">
-                不管是買屋、賣屋、租屋還是居家服務需求，歡迎透過以下方式與我聯繫，將盡快與您確認諮詢時間。
+                不管是買屋、賣屋、租屋還是居家服務需求，留下資料或直接加 LINE，我都會盡快與您聯繫。
               </p>
               <ul className="contact-list">
                 <li>
@@ -401,22 +414,14 @@ export default function SiteHome() {
                   </div>
                 </li>
               </ul>
-            </div>
 
-            <div className="booking-cta-card">
-              <h3>線上預約系統</h3>
-              <p>選擇方便的時段、留下您的需求，我會依需求先做好準備再與您聯繫。</p>
-              <ul className="booking-cta-list">
-                <li>自由選擇日期與時段</li>
-                <li>可選當面洽談、電話或線上視訊</li>
-                <li>買賣租賃、家具租賃、影音拍攝、稅務、裝潢皆可預約</li>
-              </ul>
-              <Link className="btn btn-primary btn-block" href="/card/booking">前往預約</Link>
               <a className="btn btn-line btn-block booking-line-btn" href={LINE_URL} target="_blank" rel="noopener noreferrer">
                 <LineIcon />
-                或加 LINE 直接詢問
+                加 LINE 直接詢問
               </a>
             </div>
+
+            <ContactForm lineUrl={LINE_URL} />
           </div>
         </section>
       </main>

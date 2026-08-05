@@ -46,7 +46,7 @@ export default function CardPage() {
             <p className="card-slogan">{PROFILE.slogan}</p>
           </div>
           <div className="card-actions">
-            <Link className="button" href="/card/booking">預約一對一諮詢</Link>
+            <Link className="button" href="/#contact">留下資料・免費諮詢</Link>
             <a className="button line-button" href={PROFILE.social.line} target="_blank" rel="noreferrer">加入 LINE</a>
           </div>
           <div className="contact-list">

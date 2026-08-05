@@ -7,8 +7,8 @@ const siteUrl = process.env.NEXT_PUBLIC_SITE_URL
 
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),
-  title: "劉羽菲（小飛）｜高屏房仲 預約諮詢",
-  description: "高雄・屏東專業房仲劉羽菲的電子名片與線上預約系統，提供買賣租賃、家具租賃、影音拍攝、稅務諮詢、簡易裝潢諮詢預約。",
+  title: "劉羽菲（小飛）｜高屏房仲 免費諮詢",
+  description: "高雄・屏東專業房仲劉羽菲（小飛），提供買賣租賃、家具租賃、影音拍攝、稅務諮詢、簡易裝潢。歡迎留下資料或加 LINE 免費諮詢。",
   robots: { index: false, follow: false }
 };
 
