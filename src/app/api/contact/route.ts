@@ -6,6 +6,7 @@ import {
   URGENCY_KEYS,
   type ContactEnquiry
 } from "@/lib/contact";
+import { notifyEmail } from "@/lib/email-notify";
 import { notifyLine } from "@/lib/line-notify";
 import { notifySlack } from "@/lib/slack-notify";
 
@@ -52,14 +53,15 @@ export async function POST(request: Request) {
       submittedAt: new Date().toISOString()
     };
 
-    // 同時送往 LINE 與 Slack，任一個成功就算送達
-    const [line, slack] = await Promise.all([
+    // 同時送往所有已設定的管道，任一個成功就算送達
+    const [line, email, slack] = await Promise.all([
       notifyLine(enquiry).catch(() => ({ sent: false, reason: "例外" })),
+      notifyEmail(enquiry).catch(() => ({ sent: false, reason: "例外" })),
       notifySlack(enquiry).catch(() => ({ sent: false, reason: "例外" }))
     ]);
 
-    if (!line.sent && !slack.sent) {
-      console.error("[contact] 所有通知管道皆失敗", { line, slack, name, phone });
+    if (!line.sent && !email.sent && !slack.sent) {
+      console.error("[contact] 所有通知管道皆失敗", { line, email, slack, name, phone });
       return NextResponse.json(
         {
           ok: false,
