@@ -45,7 +45,7 @@ function TrophyIcon() {
 const STATS = [
   { count: 34, suffix: "萬+", label: "短影音最高觀看次數" },
   { count: 10, suffix: "萬+", label: "多支影片觀看突破" },
-  { count: 3, suffix: "大", label: "社群平台同步曝光" },
+  { count: 5, suffix: "大", label: "社群平台同步曝光" },
   { count: 10, suffix: "項", label: "一站式服務內容" }
 ];
 
@@ -57,7 +57,7 @@ const AWARDS = [
 const FEATURES = [
   {
     title: "多平台強力曝光",
-    text: "Facebook、Instagram、YouTube 等平台同步曝光，讓更多潛在買方看見您的房子。",
+    text: "YouTube、Facebook、Instagram、Threads、TikTok 五大平台同步曝光，讓更多潛在買方看見您的房子。",
     icon: (
       <svg viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="currentColor" strokeWidth="1.8" aria-hidden="true">
         <circle cx="12" cy="12" r="9" />
