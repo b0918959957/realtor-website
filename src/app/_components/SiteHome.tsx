@@ -46,7 +46,7 @@ const STATS = [
   { count: 34, suffix: "萬+", label: "短影音最高觀看次數" },
   { count: 10, suffix: "萬+", label: "多支影片觀看突破" },
   { count: 3, suffix: "大", label: "社群平台同步曝光" },
-  { count: 5, suffix: "項", label: "一站式服務內容" }
+  { count: 9, suffix: "項", label: "一站式服務內容" }
 ];
 
 const AWARDS = [
@@ -98,22 +98,31 @@ const VIDEOS = [
 
 const SERVICES = [
   {
-    title: "家具租賃服務",
-    text: "提供多樣家具租賃方案，輕鬆佈置新居，省去搬遷與購置的負擔。",
+    title: "買賣租賃",
+    text: "高雄・屏東在地物件買賣與租賃仲介，從看屋、議價到過戶，全程為您把關。",
     icon: (
       <svg viewBox="0 0 24 24" width="34" height="34" fill="none" stroke="currentColor" strokeWidth="1.6" aria-hidden="true">
-        <path d="M3 12h18M5 12V7a1 1 0 0 1 1-1h12a1 1 0 0 1 1 1v5M4 12v6a1 1 0 0 0 1 1h1v2M18 19v2M19 12v6a1 1 0 0 1-1 1h-1" />
-        <path d="M7 12v3M17 12v3" />
+        <path d="M3 21h18M5 21V9l7-5 7 5v12M9 21v-6h6v6" />
       </svg>
     )
   },
   {
-    title: "影音拍攝",
-    text: "真人實境短影音、長影音拍攝，用真實生活場景與第一人稱視角介紹物件，拉近與客戶的距離。",
+    title: "房屋估價",
+    text: "依實價登錄、行情趨勢與周邊競品分析，提供合理且有依據的價格評估。",
     icon: (
       <svg viewBox="0 0 24 24" width="34" height="34" fill="none" stroke="currentColor" strokeWidth="1.6" aria-hidden="true">
-        <rect x="2.5" y="6" width="13" height="12" rx="1.5" />
-        <path d="M15.5 10.5 21 7v10l-5.5-3.5" />
+        <path d="M4 19V6M10 19V10M16 19V4M4 19h16" />
+      </svg>
+    )
+  },
+  {
+    title: "貸款規劃",
+    text: "協助評估貸款成數與利率方案，協助銀行對接，讓資金安排更輕鬆。",
+    icon: (
+      <svg viewBox="0 0 24 24" width="34" height="34" fill="none" stroke="currentColor" strokeWidth="1.6" aria-hidden="true">
+        <rect x="3" y="7" width="18" height="12" rx="2" />
+        <circle cx="12" cy="13" r="2.5" />
+        <path d="M7 7V5h10v2" />
       </svg>
     )
   },
@@ -128,11 +137,51 @@ const SERVICES = [
     )
   },
   {
+    title: "空屋家具租賃",
+    text: "空屋佈置家具租賃方案，讓物件更有生活感，提升買方第一眼的好感度。",
+    icon: (
+      <svg viewBox="0 0 24 24" width="34" height="34" fill="none" stroke="currentColor" strokeWidth="1.6" aria-hidden="true">
+        <path d="M3 12h18M5 12V7a1 1 0 0 1 1-1h12a1 1 0 0 1 1 1v5M4 12v6a1 1 0 0 0 1 1h1v2M18 19v2M19 12v6a1 1 0 0 1-1 1h-1" />
+        <path d="M7 12v3M17 12v3" />
+      </svg>
+    )
+  },
+  {
+    title: "樣品屋家具租賃",
+    text: "建案樣品屋整體佈置規劃，用軟裝呈現空間質感，加速成交。",
+    icon: (
+      <svg viewBox="0 0 24 24" width="34" height="34" fill="none" stroke="currentColor" strokeWidth="1.6" aria-hidden="true">
+        <path d="M4 20h16M6 20V10l6-4 6 4v10" />
+        <path d="M9 20v-5h6v5M10 11h4" />
+      </svg>
+    )
+  },
+  {
+    title: "影音拍攝",
+    text: "真人實境短影音、長影音拍攝，用真實生活場景與第一人稱視角介紹物件，拉近與客戶的距離。",
+    icon: (
+      <svg viewBox="0 0 24 24" width="34" height="34" fill="none" stroke="currentColor" strokeWidth="1.6" aria-hidden="true">
+        <rect x="2.5" y="6" width="13" height="12" rx="1.5" />
+        <path d="M15.5 10.5 21 7v10l-5.5-3.5" />
+      </svg>
+    )
+  },
+  {
+    title: "居家淨水規劃",
+    text: "依水質與居家格局評估合適的淨水配置，讓全家用水更安心。",
+    icon: (
+      <svg viewBox="0 0 24 24" width="34" height="34" fill="none" stroke="currentColor" strokeWidth="1.6" aria-hidden="true">
+        <path d="M12 3s6 6.5 6 10.5A6 6 0 0 1 6 13.5C6 9.5 12 3 12 3z" />
+        <path d="M9.5 14a2.5 2.5 0 0 0 2.5 2.5" />
+      </svg>
+    )
+  },
+  {
     title: "簡易裝潢",
     text: "整合信賴施工團隊，提供輕裝修建議與規劃，用合理預算打造理想空間。",
     icon: (
       <svg viewBox="0 0 24 24" width="34" height="34" fill="none" stroke="currentColor" strokeWidth="1.6" aria-hidden="true">
-        <path d="M3 21h18M5 21V9l7-5 7 5v12M9 21v-6h6v6" />
+        <path d="M14 6l4 4M3 21l4-1 11-11a2.83 2.83 0 0 0-4-4L3 16l-1 4z" />
       </svg>
     )
   }
@@ -233,7 +282,7 @@ export default function SiteHome() {
               <p className="hero-eyebrow">高屏房仲・專業房產顧問</p>
               <h1>您的在地房產夥伴<br /><span className="accent">劉羽菲（小飛）</span></h1>
               <p className="hero-desc">
-                用心對待每一次託付，替您找到最適合的新主人。深耕高雄市、屏東市房產市場，從買賣租賃到家具租賃、影音拍攝、稅務諮詢、簡易裝潢，一次為您搞定安家大小事。
+                用心對待每一次託付，替您找到最適合的新主人。深耕高雄市、屏東市房產市場，從買賣租賃、房屋估價、貸款規劃到稅務諮詢、家具租賃、影音拍攝、居家淨水與簡易裝潢，一次為您搞定安家大小事。
               </p>
               <div className="hero-actions">
                 <a className="btn btn-primary" href="#contact">
@@ -435,7 +484,7 @@ export default function SiteHome() {
         <div className="container footer-inner">
           <div className="footer-brand">
             <p className="footer-name">劉羽菲（小飛）</p>
-            <p>高屏房仲・專業房產顧問｜買賣租賃・家具租賃・影音拍攝・稅務諮詢・簡易裝潢</p>
+            <p>高屏房仲・專業房產顧問｜買賣租賃・房屋估價・貸款規劃・稅務諮詢・空屋家具租賃・樣品屋家具租賃・影音拍攝・居家淨水規劃・簡易裝潢</p>
           </div>
           <div className="footer-contact">
             <a href={`tel:${PROFILE.phoneRaw}`}>{PROFILE.phone}</a>

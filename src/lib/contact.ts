@@ -3,9 +3,13 @@ export const INTENTS = [
   { key: "buy", label: "買房" },
   { key: "sell", label: "賣房" },
   { key: "rent", label: "租賃" },
-  { key: "furniture", label: "家具租賃" },
-  { key: "video", label: "影音拍攝" },
+  { key: "valuation", label: "房屋估價" },
+  { key: "loan", label: "貸款規劃" },
   { key: "tax", label: "稅務諮詢" },
+  { key: "furniture_vacant", label: "空屋家具租賃" },
+  { key: "furniture_show", label: "樣品屋家具租賃" },
+  { key: "video", label: "影音拍攝" },
+  { key: "water", label: "居家淨水規劃" },
   { key: "renovation", label: "簡易裝潢" },
   { key: "other", label: "其他" }
 ] as const;
