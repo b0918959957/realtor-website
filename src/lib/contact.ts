@@ -10,7 +10,8 @@ export const INTENTS = [
   { key: "furniture_show", label: "樣品屋家具租賃" },
   { key: "video", label: "影音拍攝" },
   { key: "water", label: "居家淨水規劃" },
-  { key: "renovation", label: "簡易裝潢" },
+  { key: "renovation", label: "裝潢設計" },
+  { key: "selfbuild", label: "自地自建" },
   { key: "other", label: "其他" }
 ] as const;
 

@@ -6,7 +6,6 @@ import {
   URGENCY_KEYS,
   type ContactEnquiry
 } from "@/lib/contact";
-import { notifyEmail } from "@/lib/email-notify";
 import { notifyLine } from "@/lib/line-notify";
 import { notifySlack } from "@/lib/slack-notify";
 
@@ -53,20 +52,21 @@ export async function POST(request: Request) {
       submittedAt: new Date().toISOString()
     };
 
-    // 同時送往所有已設定的管道，任一個成功就算送達
-    const [line, email, slack] = await Promise.all([
+    // 注意：寄信不在這裡處理。FormSubmit 有 Cloudflare 機器人防護，
+    // 從 Vercel 伺服器發送一律回 403，因此改由客戶端瀏覽器直接送出。
+    const [line, slack] = await Promise.all([
       notifyLine(enquiry).catch(() => ({ sent: false, reason: "例外" })),
-      notifyEmail(enquiry).catch(() => ({ sent: false, reason: "例外" })),
       notifySlack(enquiry).catch(() => ({ sent: false, reason: "例外" }))
     ]);
 
-    if (!line.sent && !email.sent && !slack.sent) {
-      console.error("[contact] 所有通知管道皆失敗", { line, email, slack, name, phone });
+    if (!line.sent && !slack.sent) {
+      console.warn("[contact] 伺服器端通知管道未送達（信件由瀏覽器端負責）", {
+        line,
+        slack,
+        name
+      });
       return NextResponse.json(
-        {
-          ok: false,
-          error: "系統暫時無法送出，請直接來電或加 LINE 與我聯繫，造成不便敬請見諒。"
-        },
+        { ok: false, error: "伺服器端通知未設定" },
         { status: 502 }
       );
     }

@@ -46,7 +46,7 @@ const STATS = [
   { count: 34, suffix: "萬+", label: "短影音最高觀看次數" },
   { count: 10, suffix: "萬+", label: "多支影片觀看突破" },
   { count: 3, suffix: "大", label: "社群平台同步曝光" },
-  { count: 9, suffix: "項", label: "一站式服務內容" }
+  { count: 10, suffix: "項", label: "一站式服務內容" }
 ];
 
 const AWARDS = [
@@ -96,6 +96,18 @@ const VIDEOS = [
   { name: "鳳山超值透天", views: "1.1萬" }
 ];
 
+/** 受邀專訪影片（賣厝阿明 知識+ 頻道） */
+const INTERVIEWS = [
+  {
+    title: "屏東租屋注意事項",
+    url: "https://www.youtube.com/watch?v=3SDgxNTx09c"
+  },
+  {
+    title: "只要我想飛，沒有過不了的峰・小美專訪",
+    url: "https://www.youtube.com/watch?v=a6K26AnXE3s"
+  }
+];
+
 const SERVICES = [
   {
     title: "買賣租賃",
@@ -138,7 +150,7 @@ const SERVICES = [
   },
   {
     title: "空屋家具租賃",
-    text: "空屋佈置家具租賃方案，讓物件更有生活感，提升買方第一眼的好感度。",
+    text: "空屋佈置家具租賃，屋主出租房子免買家具即可招租；也讓待售物件更有生活感，提升買方第一眼的好感度。",
     icon: (
       <svg viewBox="0 0 24 24" width="34" height="34" fill="none" stroke="currentColor" strokeWidth="1.6" aria-hidden="true">
         <path d="M3 12h18M5 12V7a1 1 0 0 1 1-1h12a1 1 0 0 1 1 1v5M4 12v6a1 1 0 0 0 1 1h1v2M18 19v2M19 12v6a1 1 0 0 1-1 1h-1" />
@@ -148,7 +160,7 @@ const SERVICES = [
   },
   {
     title: "樣品屋家具租賃",
-    text: "建案樣品屋整體佈置規劃，用軟裝呈現空間質感，加速成交。",
+    text: "建案樣品屋家具租賃（僅提供家具租賃，不含軟裝），用合理成本呈現空間質感，加速成交。",
     icon: (
       <svg viewBox="0 0 24 24" width="34" height="34" fill="none" stroke="currentColor" strokeWidth="1.6" aria-hidden="true">
         <path d="M4 20h16M6 20V10l6-4 6 4v10" />
@@ -177,11 +189,21 @@ const SERVICES = [
     )
   },
   {
-    title: "簡易裝潢",
-    text: "整合信賴施工團隊，提供輕裝修建議與規劃，用合理預算打造理想空間。",
+    title: "裝潢設計",
+    text: "從簡易輕裝修到設計師整體規劃都能承接，整合信賴施工團隊，依預算打造理想空間。",
     icon: (
       <svg viewBox="0 0 24 24" width="34" height="34" fill="none" stroke="currentColor" strokeWidth="1.6" aria-hidden="true">
         <path d="M14 6l4 4M3 21l4-1 11-11a2.83 2.83 0 0 0-4-4L3 16l-1 4z" />
+      </svg>
+    )
+  },
+  {
+    title: "自地自建",
+    text: "有土地想蓋房？從法規評估、營造團隊到工程進度，陪您把想像蓋成家。",
+    icon: (
+      <svg viewBox="0 0 24 24" width="34" height="34" fill="none" stroke="currentColor" strokeWidth="1.6" aria-hidden="true">
+        <path d="M3 21h18M6 21V11l6-5 6 5v10" />
+        <path d="M10 21v-5h4v5M4 11l8-7 8 7" />
       </svg>
     )
   }
@@ -282,7 +304,7 @@ export default function SiteHome() {
               <p className="hero-eyebrow">高屏房仲・專業房產顧問</p>
               <h1>您的在地房產夥伴<br /><span className="accent">劉羽菲（小飛）</span></h1>
               <p className="hero-desc">
-                用心對待每一次託付，替您找到最適合的新主人。深耕高雄市、屏東市房產市場，從買賣租賃、房屋估價、貸款規劃到稅務諮詢、家具租賃、影音拍攝、居家淨水與簡易裝潢，一次為您搞定安家大小事。
+                用心對待每一次託付，替您找到最適合的新主人。深耕高雄市、屏東市房產市場，從買賣租賃、房屋估價、貸款規劃到稅務諮詢、家具租賃、影音拍攝、居家淨水、裝潢設計與自地自建，一次為您搞定安家大小事。
               </p>
               <div className="hero-actions">
                 <a className="btn btn-primary" href="#contact">
@@ -407,7 +429,15 @@ export default function SiteHome() {
               </div>
               <div className="media-text">
                 <h3>媒體曝光・專業口碑</h3>
-                <p>受邀出席不動產知識分享 Podcast，與業界共同交流買房知識，持續精進專業，只為給客戶更完整的服務。</p>
+                <p>受邀出席「賣厝阿明 知識+」不動產知識分享節目，與業界共同交流買房知識，持續精進專業，只為給客戶更完整的服務。</p>
+                <div className="media-links">
+                  {INTERVIEWS.map((item) => (
+                    <a key={item.url} href={item.url} target="_blank" rel="noopener noreferrer">
+                      <span className="media-play" aria-hidden="true">▶</span>
+                      {item.title}
+                    </a>
+                  ))}
+                </div>
               </div>
             </div>
           </div>
@@ -484,7 +514,7 @@ export default function SiteHome() {
         <div className="container footer-inner">
           <div className="footer-brand">
             <p className="footer-name">劉羽菲（小飛）</p>
-            <p>高屏房仲・專業房產顧問｜買賣租賃・房屋估價・貸款規劃・稅務諮詢・空屋家具租賃・樣品屋家具租賃・影音拍攝・居家淨水規劃・簡易裝潢</p>
+            <p>高屏房仲・專業房產顧問｜買賣租賃・房屋估價・貸款規劃・稅務諮詢・空屋與樣品屋家具租賃・影音拍攝・居家淨水規劃・裝潢設計・自地自建</p>
           </div>
           <div className="footer-contact">
             <a href={`tel:${PROFILE.phoneRaw}`}>{PROFILE.phone}</a>

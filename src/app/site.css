@@ -762,3 +762,41 @@
   font-size: 0.95rem;
   margin-bottom: 24px;
 }
+
+/* ── 專訪影片連結 ─────────────────────────────────── */
+.site-root .media-links {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-top: 16px;
+}
+.site-root .media-links a {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  color: rgba(255, 255, 255, 0.92);
+  font-size: 0.92rem;
+  font-weight: 500;
+  padding: 10px 14px;
+  border: 1px solid rgba(216, 162, 70, 0.4);
+  border-radius: 10px;
+  background: rgba(216, 162, 70, 0.08);
+  transition: all 0.2s ease;
+}
+.site-root .media-links a:hover {
+  background: rgba(216, 162, 70, 0.18);
+  border-color: var(--foresight-highlight-gold);
+  transform: translateX(3px);
+}
+.site-root .media-play {
+  flex-shrink: 0;
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  background: var(--foresight-secondary-orange);
+  color: #fff;
+  font-size: 0.62rem;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
