@@ -1,5 +1,6 @@
 import { buildEnquiryMessage } from "@/lib/line-notify";
 import { PROFILE } from "@/lib/profile";
+import { getSiteUrl } from "@/lib/site-url";
 import {
   contactMethodLabel,
   contactTimeLabel,
@@ -18,10 +19,9 @@ export async function notifyEmail(enquiry: ContactEnquiry) {
   const email = process.env.CONTACT_EMAIL?.trim() || PROFILE.email;
   if (!email) return { sent: false, reason: "未設定收件信箱" };
 
-  // FormSubmit 會擋掉沒有來源標頭的請求，必須帶上網站網址
-  const siteUrl =
-    process.env.NEXT_PUBLIC_SITE_URL?.trim() ||
-    (process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : "http://localhost:3000");
+  // FormSubmit 會擋掉沒有來源標頭的請求，且啟用狀態綁定網域，
+  // 必須帶上固定的正式網域（不能用每次部署都會變的 VERCEL_URL）
+  const siteUrl = getSiteUrl();
 
   try {
     const response = await fetch(`https://formsubmit.co/ajax/${encodeURIComponent(email)}`, {
