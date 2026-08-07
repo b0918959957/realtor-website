@@ -200,6 +200,7 @@ const INTERVIEWS = [
 const SERVICES = [
   {
     title: "買賣租賃",
+    accent: "#003C7D", // 核心信賴・品牌深藍
     text: "高雄・屏東在地物件買賣與租賃仲介，從看屋、議價到過戶，全程為您把關。",
     icon: (
       <svg viewBox="0 0 24 24" width="34" height="34" fill="none" stroke="currentColor" strokeWidth="1.6" aria-hidden="true">
@@ -209,6 +210,7 @@ const SERVICES = [
   },
   {
     title: "房屋估價",
+    accent: "#0A6EA8", // 數據分析・亮藍
     text: "依實價登錄、行情趨勢與周邊競品分析，提供合理且有依據的價格評估。",
     icon: (
       <svg viewBox="0 0 24 24" width="34" height="34" fill="none" stroke="currentColor" strokeWidth="1.6" aria-hidden="true">
@@ -218,6 +220,7 @@ const SERVICES = [
   },
   {
     title: "貸款規劃",
+    accent: "#2E8B57", // 金流・綠
     text: "協助評估貸款成數與利率方案，協助銀行對接，讓資金安排更輕鬆。",
     icon: (
       <svg viewBox="0 0 24 24" width="34" height="34" fill="none" stroke="currentColor" strokeWidth="1.6" aria-hidden="true">
@@ -229,6 +232,7 @@ const SERVICES = [
   },
   {
     title: "稅務諮詢",
+    accent: "#12897E", // 帳務・青綠
     text: "協助釐清房地合一稅、契稅、印花稅等相關規定，讓交易過程安心透明。",
     icon: (
       <svg viewBox="0 0 24 24" width="34" height="34" fill="none" stroke="currentColor" strokeWidth="1.6" aria-hidden="true">
@@ -239,6 +243,7 @@ const SERVICES = [
   },
   {
     title: "空屋家具租賃",
+    accent: "#C98A3C", // 木質・暖金
     text: "空屋佈置家具租賃，屋主出租房子免買家具即可招租；也讓待售物件更有生活感，提升買方第一眼的好感度。",
     icon: (
       <svg viewBox="0 0 24 24" width="34" height="34" fill="none" stroke="currentColor" strokeWidth="1.6" aria-hidden="true">
@@ -249,6 +254,7 @@ const SERVICES = [
   },
   {
     title: "樣品屋家具租賃",
+    accent: "#D9A441", // 樣品屋・淺金
     text: "建案樣品屋家具租賃（僅提供家具租賃，不含軟裝），用合理成本呈現空間質感，加速成交。",
     icon: (
       <svg viewBox="0 0 24 24" width="34" height="34" fill="none" stroke="currentColor" strokeWidth="1.6" aria-hidden="true">
@@ -259,6 +265,7 @@ const SERVICES = [
   },
   {
     title: "影音拍攝",
+    accent: "#E4572E", // 影音活力・橘紅
     text: "真人實境短影音、長影音拍攝，用真實生活場景與第一人稱視角介紹物件，拉近與客戶的距離。",
     icon: (
       <svg viewBox="0 0 24 24" width="34" height="34" fill="none" stroke="currentColor" strokeWidth="1.6" aria-hidden="true">
@@ -269,6 +276,7 @@ const SERVICES = [
   },
   {
     title: "居家淨水規劃",
+    accent: "#1BA5C4", // 水・水藍
     text: "依水質與居家格局評估合適的淨水配置，讓全家用水更安心。",
     icon: (
       <svg viewBox="0 0 24 24" width="34" height="34" fill="none" stroke="currentColor" strokeWidth="1.6" aria-hidden="true">
@@ -279,6 +287,7 @@ const SERVICES = [
   },
   {
     title: "裝潢設計",
+    accent: "#8E6BAF", // 設計感・紫
     text: "從簡易輕裝修到設計師整體規劃都能承接，整合信賴施工團隊，依預算打造理想空間。",
     icon: (
       <svg viewBox="0 0 24 24" width="34" height="34" fill="none" stroke="currentColor" strokeWidth="1.6" aria-hidden="true">
@@ -288,6 +297,7 @@ const SERVICES = [
   },
   {
     title: "自地自建",
+    accent: "#A8623A", // 建築土地・磚土色
     text: "有土地想蓋房？從法規評估、營造團隊到工程進度，陪您把想像蓋成家。",
     icon: (
       <svg viewBox="0 0 24 24" width="34" height="34" fill="none" stroke="currentColor" strokeWidth="1.6" aria-hidden="true">
@@ -586,7 +596,11 @@ export default function SiteHome() {
             <p className="section-desc">不只是買賣房屋，從搬入前到入住後，全方位守護您的居住品質。</p>
             <div className="services-grid">
               {SERVICES.map((service) => (
-                <div className="service-card" key={service.title}>
+                <div
+                  className="service-card"
+                  key={service.title}
+                  style={{ "--accent": service.accent } as React.CSSProperties}
+                >
                   <div className="service-icon">{service.icon}</div>
                   <h3>{service.title}</h3>
                   <p>{service.text}</p>

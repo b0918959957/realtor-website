@@ -1109,3 +1109,59 @@
 .site-root .platform-links a.platform-tiktok:hover {
   box-shadow: 0 8px 22px rgba(0, 0, 0, 0.6), inset 0 0 0 1px rgba(255, 255, 255, 0.45);
 }
+
+/* ── 服務卡片：每個服務用主題色（--accent 由元件帶入）── */
+.site-root .service-card {
+  position: relative;
+  border-top: 4px solid var(--accent, var(--foresight-primary-navy));
+  overflow: hidden;
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
+}
+/* 右上角的主題色暈染，低調不搶戲 */
+.site-root .service-card::after {
+  content: "";
+  position: absolute;
+  top: -46px;
+  right: -46px;
+  width: 130px;
+  height: 130px;
+  border-radius: 50%;
+  background: var(--accent, var(--foresight-primary-navy));
+  opacity: 0.07;
+  pointer-events: none;
+  transition: opacity 0.25s ease, transform 0.25s ease;
+}
+.site-root .service-card:hover::after {
+  opacity: 0.13;
+  transform: scale(1.15);
+}
+.site-root .service-card:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 18px 40px rgba(0, 30, 60, 0.16);
+}
+
+/* 圖示放進主題色圓形底 */
+.site-root .service-icon {
+  position: relative;
+  width: 62px;
+  height: 62px;
+  border-radius: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: color-mix(in srgb, var(--accent, #003C7D) 12%, transparent);
+  color: var(--accent, var(--foresight-primary-navy));
+  margin-bottom: 18px;
+}
+.site-root .service-card h3 {
+  position: relative;
+  color: var(--accent, var(--foresight-primary-navy));
+}
+.site-root .service-card p { position: relative; }
+
+/* 覆蓋原本 nth-child 的四色循環（只對前 4 張生效，導致後面全同色） */
+.site-root .service-card:nth-child(2),
+.site-root .service-card:nth-child(3),
+.site-root .service-card:nth-child(4) {
+  border-top-color: var(--accent, var(--foresight-primary-navy));
+}
