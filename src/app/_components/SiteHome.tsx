@@ -124,7 +124,7 @@ const VIDEOS: { name: string; views?: string; url?: string }[] = [
   },
   {
     name: "房貸繳完不等於房子歸你",
-    views: "14萬",
+    views: "26.6萬",
     url: "https://www.facebook.com/share/v/1CEULtobNu/"
   },
   {
@@ -138,6 +138,7 @@ const VIDEOS: { name: string; views?: string; url?: string }[] = [
   },
   {
     name: "千萬不要隨便辦印鑑證明",
+    views: "13.8萬",
     url: "https://www.instagram.com/reel/DRRxKPaEYg6/"
   },
   {
@@ -150,10 +151,12 @@ const VIDEOS: { name: string; views?: string; url?: string }[] = [
   },
   {
     name: "高雄左營人必吃清單公開",
+    views: "11.6萬",
     url: "https://www.instagram.com/reel/DQG73BEkXF-/"
   },
   {
     name: "近義享輕軌車庫透天・3房2廳",
+    views: "5.5萬",
     url: "https://www.instagram.com/reel/DauwkNLxY8q/"
   }
 ];
