@@ -56,7 +56,7 @@ function TrophyIcon() {
 }
 
 const STATS = [
-  { count: 132, suffix: "萬+", label: "累積影音觀看次數" },
+  { count: 132, suffix: "萬+", label: "精選 10 支影片累積觀看" },
   { count: 5, suffix: "支", label: "影片單支破 10 萬觀看" },
   { count: 5, suffix: "大", label: "社群平台同步曝光" },
   { count: 10, suffix: "項", label: "一站式服務內容" }
