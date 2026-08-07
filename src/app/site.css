@@ -1029,3 +1029,72 @@
   border-radius: 2px;
   background: linear-gradient(90deg, transparent, rgba(216, 162, 70, 0.85), transparent);
 }
+
+/* ── 社群平台：各自的品牌色與圖示 ─────────────────── */
+.site-root .platform-links a {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  border: none;
+  padding: 10px 20px;
+  color: #fff;
+}
+.site-root .platform-links a:hover {
+  transform: translateY(-3px);
+  filter: brightness(1.08);
+}
+
+/* YouTube 紅 */
+.site-root .platform-youtube {
+  background: #FF0000;
+  box-shadow: 0 4px 14px rgba(255, 0, 0, 0.35);
+}
+.site-root .platform-youtube:hover {
+  background: #FF0000;
+  box-shadow: 0 8px 22px rgba(255, 0, 0, 0.5);
+  color: #fff;
+}
+
+/* Facebook 藍 */
+.site-root .platform-facebook {
+  background: #1877F2;
+  box-shadow: 0 4px 14px rgba(24, 119, 242, 0.35);
+}
+.site-root .platform-facebook:hover {
+  background: #1877F2;
+  box-shadow: 0 8px 22px rgba(24, 119, 242, 0.5);
+  color: #fff;
+}
+
+/* Instagram 品牌漸層 */
+.site-root .platform-instagram {
+  background: linear-gradient(45deg, #F58529 0%, #DD2A7B 45%, #8134AF 75%, #515BD4 100%);
+  box-shadow: 0 4px 14px rgba(221, 42, 123, 0.38);
+}
+.site-root .platform-instagram:hover {
+  box-shadow: 0 8px 22px rgba(221, 42, 123, 0.55);
+  color: #fff;
+}
+
+/* Threads 與 TikTok 品牌色為黑，深藍底上改用白底黑字保留識別 */
+.site-root .platform-threads,
+.site-root .platform-tiktok {
+  background: #fff;
+  color: #000;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.3);
+}
+.site-root .platform-threads:hover,
+.site-root .platform-tiktok:hover {
+  background: #fff;
+  color: #000;
+  box-shadow: 0 8px 22px rgba(0, 0, 0, 0.42);
+}
+
+/* 提高選擇器優先權，避免被 .platform-links a 的白字蓋過 */
+.site-root .platform-links a.platform-threads,
+.site-root .platform-links a.platform-tiktok,
+.site-root .platform-links a.platform-threads:hover,
+.site-root .platform-links a.platform-tiktok:hover {
+  background: #fff;
+  color: #0B0B0B;
+}
