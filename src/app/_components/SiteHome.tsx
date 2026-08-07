@@ -4,6 +4,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
 import ContactForm from "@/app/_components/ContactForm";
+import LoanCalculator from "@/app/_components/LoanCalculator";
 import { PROFILE } from "@/lib/profile";
 
 const LINE_URL = PROFILE.social.line;
@@ -366,6 +367,7 @@ export default function SiteHome() {
             <a href="#service-area" onClick={closeNav}>服務區域</a>
             <a href="#achievements" onClick={closeNav}>我的戰績</a>
             <a href="#services" onClick={closeNav}>服務項目</a>
+            <a href="#calculator" onClick={closeNav}>房貸試算</a>
             <a href="#contact" onClick={closeNav}>聯絡我</a>
             <a
               className="btn btn-line nav-line-btn"
@@ -434,22 +436,22 @@ export default function SiteHome() {
           <div className="container">
             <p className="section-eyebrow">SERVICE AREA</p>
             <h2 className="section-title">我服務的區域</h2>
-            <p className="section-desc">高雄・屏東在地深耕，熟悉行情與眉角；高屏以外的委託，也能協助您找到合適的處理方式。</p>
+            <p className="section-desc">高雄・屏東在地深耕，熟悉行情與眉角；外縣市的需求，一樣可以交給我服務。</p>
             <div className="area-grid">
-              <div className="area-card">
+              <div className="area-card" style={{ "--accent": "#003C7D" } as React.CSSProperties}>
                 <div className="area-icon"><PinIcon /></div>
                 <h3>高雄市</h3>
                 <p>在地深耕、實戰經驗豐富，掌握市區最新脈動與重劃區、捷運沿線行情變化。</p>
               </div>
-              <div className="area-card">
+              <div className="area-card" style={{ "--accent": "#12897E" } as React.CSSProperties}>
                 <div className="area-icon"><PinIcon /></div>
                 <h3>屏東市</h3>
                 <p>在地經營、口碑扎根，提供屏東市買賣租賃第一手物件資訊與客製化服務。</p>
               </div>
-              <div className="area-card area-card-extend">
+              <div className="area-card" style={{ "--accent": "#E4572E" } as React.CSSProperties}>
                 <div className="area-icon"><GlobeIcon /></div>
-                <h3>高屏以外</h3>
-                <p>外縣市的物件想委託或想了解行情，一樣歡迎與我聯繫，協助您評估並媒合合適的在地夥伴。</p>
+                <h3>外縣市</h3>
+                <p>不在高屏也沒問題，買賣、委託、行情評估與後續流程一樣由我親自為您處理。</p>
               </div>
             </div>
           </div>
@@ -607,6 +609,18 @@ export default function SiteHome() {
                 </div>
               ))}
             </div>
+          </div>
+        </section>
+
+        {/* Loan Calculator */}
+        <section className="calculator" id="calculator">
+          <div className="container">
+            <p className="section-eyebrow">MORTGAGE CALCULATOR</p>
+            <h2 className="section-title">房貸試算</h2>
+            <p className="section-desc">
+              拉一拉就知道每月要繳多少、自備款要準備多少。看不懂或想知道自己實際能貸多少，直接問我。
+            </p>
+            <LoanCalculator contactHref="#contact" />
           </div>
         </section>
 
