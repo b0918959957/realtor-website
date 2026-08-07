@@ -134,6 +134,7 @@ const VIDEOS: { name: string; views?: string; url?: string }[] = [
   },
   {
     name: "第一次斡旋要注意什麼？",
+    views: "3萬",
     url: "https://www.facebook.com/share/r/1GRcsptm5Y/"
   },
   {
@@ -143,6 +144,7 @@ const VIDEOS: { name: string; views?: string; url?: string }[] = [
   },
   {
     name: "首購族的 20 個注意事項",
+    views: "8.8萬",
     url: "https://www.instagram.com/reel/DMcxRkozhQq/"
   },
   {
