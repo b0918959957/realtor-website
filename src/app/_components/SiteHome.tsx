@@ -108,7 +108,7 @@ const FEATURES = [
 ];
 
 /**
- * 影音作品（知識型與物件開箱一起呈現）。
+ * 影音作品（依觀看數由高至低排序）。
  * url 填入後卡片可點擊；views 留空則不顯示觀看數。
  */
 const VIDEOS: { name: string; views?: string; url?: string }[] = [
@@ -118,24 +118,14 @@ const VIDEOS: { name: string; views?: string; url?: string }[] = [
     url: "https://www.facebook.com/share/r/1BejFksdcH/"
   },
   {
-    name: "新屋為何沒瓦斯・保命設計揭秘",
-    views: "18萬",
-    url: "https://www.facebook.com/share/r/1FDe5MTthN/"
-  },
-  {
     name: "房貸繳完不等於房子歸你",
     views: "26.6萬",
     url: "https://www.facebook.com/share/v/1CEULtobNu/"
   },
   {
-    name: "黑心房仲不告訴你的事",
-    views: "7萬",
-    url: "https://vt.tiktok.com/ZS4x9DcKQ/"
-  },
-  {
-    name: "第一次斡旋要注意什麼？",
-    views: "3萬",
-    url: "https://www.facebook.com/share/r/1GRcsptm5Y/"
+    name: "新屋為何沒瓦斯・保命設計揭秘",
+    views: "18萬",
+    url: "https://www.facebook.com/share/r/1FDe5MTthN/"
   },
   {
     name: "千萬不要隨便辦印鑑證明",
@@ -143,23 +133,34 @@ const VIDEOS: { name: string; views?: string; url?: string }[] = [
     url: "https://www.instagram.com/reel/DRRxKPaEYg6/"
   },
   {
-    name: "首購族的 20 個注意事項",
-    views: "8.8萬",
-    url: "https://www.instagram.com/reel/DMcxRkozhQq/"
-  },
-  {
-    name: "如何合法處理遺產與銀行帳戶",
-    url: "https://vt.tiktok.com/ZS4x9XvxY/"
-  },
-  {
     name: "高雄左營人必吃清單公開",
     views: "11.6萬",
     url: "https://www.instagram.com/reel/DQG73BEkXF-/"
   },
   {
+    name: "首購族的 20 個注意事項",
+    views: "8.8萬",
+    url: "https://www.instagram.com/reel/DMcxRkozhQq/"
+  },
+  {
+    name: "黑心房仲不告訴你的事",
+    views: "7萬",
+    url: "https://vt.tiktok.com/ZS4x9DcKQ/"
+  },
+  {
     name: "近義享輕軌車庫透天・3房2廳",
     views: "5.5萬",
     url: "https://www.instagram.com/reel/DauwkNLxY8q/"
+  },
+  {
+    name: "如何合法處理遺產與銀行帳戶",
+    views: "3.9萬",
+    url: "https://vt.tiktok.com/ZS4x9XvxY/"
+  },
+  {
+    name: "第一次斡旋要注意什麼？",
+    views: "3萬",
+    url: "https://www.facebook.com/share/r/1GRcsptm5Y/"
   }
 ];
 
