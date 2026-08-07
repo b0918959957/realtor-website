@@ -64,8 +64,16 @@ const STATS = [
 
 /** 獲獎紀錄。url 填入後該張卡片會變成可點擊連結。 */
 const AWARDS: { org: string; title: string; url?: string }[] = [
-  { org: "住商不動產", title: "2026年高屏澎東短影音 第二名" },
-  { org: "住商不動產", title: "年度風雲經紀人獎" }
+  {
+    org: "住商不動產",
+    title: "2026年高屏澎東短影音 第二名",
+    url: "https://www.instagram.com/p/DbKVJbTkQi4/"
+  },
+  {
+    org: "住商不動產",
+    title: "年度風雲經紀人獎",
+    url: "https://www.instagram.com/reel/C43Bs67pUKs/"
+  }
 ];
 
 const FEATURES = [
