@@ -9,6 +9,9 @@ import { PROFILE } from "@/lib/profile";
 
 const LINE_URL = PROFILE.social.line;
 
+/** 自我介紹短影音（委託前先認識我） */
+const ABOUT_ME_URL = "https://www.instagram.com/reel/DQyFQoxEe72/";
+
 function LineIcon({ size = 20 }: { size?: number }) {
   return (
     <svg viewBox="0 0 24 24" width={size} height={size} fill="currentColor" aria-hidden="true">
@@ -59,7 +62,8 @@ const STATS = [
   { count: 10, suffix: "項", label: "一站式服務內容" }
 ];
 
-const AWARDS = [
+/** 獲獎紀錄。url 填入後該張卡片會變成可點擊連結。 */
+const AWARDS: { org: string; title: string; url?: string }[] = [
   { org: "住商不動產", title: "2026年高屏澎東短影音 第二名" },
   { org: "住商不動產", title: "年度風雲經紀人獎" }
 ];
@@ -416,6 +420,15 @@ export default function SiteHome() {
                   {PROFILE.phone}
                 </a>
               </div>
+              <a
+                className="hero-intro-link"
+                href={ABOUT_ME_URL}
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                <span className="hero-intro-play" aria-hidden="true">▶</span>
+                決定委託前，先花一分鐘認識我
+              </a>
             </div>
             <div className="hero-photo">
               <div className="hero-photo-glow" />
@@ -475,15 +488,31 @@ export default function SiteHome() {
             </div>
 
             <div className="awards-grid">
-              {AWARDS.map((award) => (
-                <div className="award-card" key={award.title}>
-                  <div className="award-icon"><TrophyIcon /></div>
-                  <div className="award-body">
-                    <p className="award-org">{award.org}</p>
-                    <h3>{award.title}</h3>
-                  </div>
-                </div>
-              ))}
+              {AWARDS.map((award) => {
+                const inner = (
+                  <>
+                    <div className="award-icon"><TrophyIcon /></div>
+                    <div className="award-body">
+                      <p className="award-org">{award.org}</p>
+                      <h3>{award.title}</h3>
+                      {award.url && <span className="award-view">▶ 點我看得獎影片</span>}
+                    </div>
+                  </>
+                );
+                return award.url ? (
+                  <a
+                    className="award-card"
+                    key={award.title}
+                    href={award.url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    {inner}
+                  </a>
+                ) : (
+                  <div className="award-card" key={award.title}>{inner}</div>
+                );
+              })}
             </div>
 
             <div className="feature-list">
@@ -669,7 +698,9 @@ export default function SiteHome() {
       </main>
 
       <p className="closing-tagline">
-        房屋買賣，不只是成交一間房子，更是替每位屋主找到最適合的新主人。
+        我相信，每一間房子都在等待真正適合它的主人；
+        <br />
+        而每一次買賣，都不只是房子的流轉，更是一份信任、一個家的延續。
         <span>— 劉羽菲（小飛）</span>
       </p>
 

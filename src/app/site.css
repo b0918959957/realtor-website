@@ -1369,3 +1369,54 @@
   background: var(--gray-50);
   border-style: solid;
 }
+
+/* ── Hero 的「先認識我」連結 ───────────────────── */
+.site-root .hero-intro-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  margin-top: 22px;
+  color: rgba(255, 255, 255, 0.82);
+  font-size: 0.95rem;
+  font-weight: 500;
+  padding-bottom: 3px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.28);
+  transition: color 0.2s ease, border-color 0.2s ease, gap 0.2s ease;
+}
+.site-root .hero-intro-link:hover {
+  color: #fff;
+  border-color: var(--foresight-secondary-orange);
+  gap: 14px;
+}
+.site-root .hero-intro-play {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  background: var(--foresight-secondary-orange);
+  color: #fff;
+  font-size: 0.6rem;
+  flex-shrink: 0;
+}
+
+/* 收尾標語：兩行更好讀 */
+.site-root .closing-tagline { line-height: 1.9; }
+
+/* ── 可點擊的獎項卡片 ─────────────────────────── */
+.site-root a.award-card {
+  transition: transform 0.22s ease, border-color 0.22s ease, box-shadow 0.22s ease;
+}
+.site-root a.award-card:hover {
+  transform: translateY(-4px);
+  border-color: var(--foresight-highlight-gold);
+  box-shadow: 0 14px 32px rgba(0, 18, 40, 0.35);
+}
+.site-root .award-view {
+  display: block;
+  margin-top: 6px;
+  font-size: 0.76rem;
+  color: var(--foresight-highlight-gold);
+  opacity: 0.9;
+}
