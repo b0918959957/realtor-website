@@ -108,25 +108,62 @@ const FEATURES = [
 ];
 
 /**
- * 短影音成效。
- * url 填入後該張卡片會自動變成可點擊連結；留空則維持純展示。
- * views 留空則不顯示觀看數那一行。
+ * 影音作品。type 用來標示是知識型還是物件開箱。
+ * url 填入後卡片可點擊；views 留空則不顯示觀看數。
  */
-const VIDEOS: { name: string; views?: string; url?: string }[] = [
+const VIDEOS: { name: string; views?: string; url?: string; type?: "knowledge" | "property" }[] = [
   {
     name: "房東一定要知道的租屋四大新制",
     views: "34萬",
+    type: "knowledge",
     url: "https://www.facebook.com/share/r/1BejFksdcH/"
   },
   {
     name: "新屋為何沒瓦斯・保命設計揭秘",
     views: "18萬",
+    type: "knowledge",
     url: "https://www.facebook.com/share/r/1FDe5MTthN/"
   },
   {
     name: "房貸繳完不等於房子歸你",
     views: "14萬",
+    type: "knowledge",
     url: "https://www.facebook.com/share/v/1CEULtobNu/"
+  },
+  {
+    name: "黑心房仲不告訴你的事",
+    type: "knowledge",
+    url: "https://vt.tiktok.com/ZS4x9DcKQ/"
+  },
+  {
+    name: "第一次斡旋要注意什麼？",
+    type: "knowledge",
+    url: "https://www.facebook.com/share/r/1GRcsptm5Y/"
+  },
+  {
+    name: "千萬不要隨便辦印鑑證明",
+    type: "knowledge",
+    url: "https://www.instagram.com/reel/DRRxKPaEYg6/"
+  },
+  {
+    name: "首購族的 20 個注意事項",
+    type: "knowledge",
+    url: "https://www.instagram.com/reel/DMcxRkozhQq/"
+  },
+  {
+    name: "如何合法處理遺產與銀行帳戶",
+    type: "knowledge",
+    url: "https://vt.tiktok.com/ZS4x9XvxY/"
+  },
+  {
+    name: "高雄左營人必吃清單公開",
+    type: "knowledge",
+    url: "https://www.instagram.com/reel/DQG73BEkXF-/"
+  },
+  {
+    name: "近義享輕軌車庫透天・3房2廳",
+    type: "property",
+    url: "https://www.instagram.com/reel/DauwkNLxY8q/"
   }
 ];
 
@@ -558,7 +595,14 @@ export default function SiteHome() {
                 {VIDEOS.map((video) => {
                   const inner = (
                     <>
-                      <span className="video-play">▶</span>
+                      <div className="video-top">
+                        <span className="video-play">▶</span>
+                        {video.type && (
+                          <span className={`video-tag video-tag-${video.type}`}>
+                            {video.type === "property" ? "物件開箱" : "房產知識"}
+                          </span>
+                        )}
+                      </div>
                       <p className="video-name">{video.name}</p>
                       {video.views && (
                         <p className="video-views">{video.views} 觀看次數</p>
