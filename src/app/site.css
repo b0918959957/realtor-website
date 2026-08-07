@@ -1499,31 +1499,8 @@
   filter: brightness(1.1) contrast(1.06) saturate(1.06);
 }
 
-/* ── 影音卡片：知識／物件標籤 ─────────────────── */
-.site-root .video-top {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 8px;
-  margin-bottom: 12px;
+
+/* 影音改為 5 欄，10 支剛好兩排對齊 */
+@media (min-width: 1100px) {
+  .site-root .video-grid { grid-template-columns: repeat(5, 1fr); }
 }
-.site-root .video-top .video-play { margin-bottom: 0; }
-.site-root .video-tag {
-  padding: 3px 10px;
-  border-radius: 999px;
-  font-size: 0.7rem;
-  font-weight: 700;
-  letter-spacing: 0.02em;
-  white-space: nowrap;
-}
-.site-root .video-tag-knowledge {
-  background: rgba(216, 162, 70, 0.18);
-  border: 1px solid rgba(216, 162, 70, 0.5);
-  color: #FFE1A4;
-}
-.site-root .video-tag-property {
-  background: rgba(27, 165, 196, 0.18);
-  border: 1px solid rgba(27, 165, 196, 0.55);
-  color: #A8E6F4;
-}
-.site-root .video-name { min-height: auto; }
