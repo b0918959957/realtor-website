@@ -33,6 +33,15 @@ function PinIcon({ size = 32 }: { size?: number }) {
   );
 }
 
+function GlobeIcon({ size = 32 }: { size?: number }) {
+  return (
+    <svg viewBox="0 0 24 24" width={size} height={size} fill="none" stroke="currentColor" strokeWidth="1.8" aria-hidden="true">
+      <circle cx="12" cy="12" r="9" />
+      <path d="M3 12h18M12 3c2.5 2.6 3.8 6 3.8 9s-1.3 6.4-3.8 9c-2.5-2.6-3.8-6-3.8-9s1.3-6.4 3.8-9z" />
+    </svg>
+  );
+}
+
 function TrophyIcon() {
   return (
     <svg viewBox="0 0 24 24" width="30" height="30" fill="none" stroke="currentColor" strokeWidth="1.6" aria-hidden="true">
@@ -85,15 +94,36 @@ const FEATURES = [
   }
 ];
 
-const VIDEOS = [
-  { name: "房東一定要知道的租屋4大新制", views: "34萬" },
-  { name: "新屋為何沒瓦斯・保命設計揭秘", views: "18萬" },
-  { name: "房貸繳完別急著換屋", views: "14萬" },
-  { name: "爸媽出錢別收現金", views: "12萬" },
-  { name: "少一個動作房子可能就不見", views: "6.3萬" },
-  { name: "新屋為何沒瓦斯・保命設計揭秘 2", views: "4.5萬" },
-  { name: "看屋不踩雷10項檢查清單", views: "2.3萬" },
-  { name: "鳳山超值透天", views: "1.1萬" }
+/**
+ * 短影音成效。
+ * url 填入後該張卡片會自動變成可點擊連結；留空則維持純展示。
+ * views 留空則不顯示觀看數那一行。
+ */
+const VIDEOS: { name: string; views?: string; url?: string }[] = [
+  {
+    name: "房東一定要知道的租屋四大新制",
+    views: "34萬",
+    url: "https://www.facebook.com/share/r/1BejFksdcH/"
+  },
+  {
+    name: "新屋為何沒瓦斯・保命設計揭秘",
+    views: "18萬",
+    url: "https://www.facebook.com/share/r/1FDe5MTthN/"
+  },
+  {
+    name: "房貸繳完不等於房子歸你",
+    views: "14萬",
+    url: "https://www.facebook.com/share/v/1CEULtobNu/"
+  }
+];
+
+/** 經營中的社群平台，url 填入後才會顯示（網址已去除分享用的追蹤參數） */
+const PLATFORMS: { name: string; url?: string }[] = [
+  { name: "YouTube", url: "https://www.youtube.com/channel/UCJsR5swTU7oMCotIEl4L84g" },
+  { name: "Facebook", url: "https://www.facebook.com/liu.yu.fei.354146" },
+  { name: "Instagram", url: "https://www.instagram.com/taiwandim/" },
+  { name: "Threads", url: "https://www.threads.com/@taiwandim" },
+  { name: "TikTok", url: "https://www.tiktok.com/@user7450875561295" }
 ];
 
 /** 受邀專訪影片（賣厝阿明 知識+ 頻道） */
@@ -335,17 +365,22 @@ export default function SiteHome() {
           <div className="container">
             <p className="section-eyebrow">SERVICE AREA</p>
             <h2 className="section-title">我服務的區域</h2>
-            <p className="section-desc">在地深耕，熟悉每個角落的行情與眉角，提供最即時、最貼近在地生活的房產建議。</p>
+            <p className="section-desc">高雄・屏東在地深耕，熟悉行情與眉角；高屏以外的委託，也能協助您找到合適的處理方式。</p>
             <div className="area-grid">
               <div className="area-card">
                 <div className="area-icon"><PinIcon /></div>
                 <h3>高雄市</h3>
-                <p>熟悉三民、鳳山、左營、楠梓等各行政區行情，掌握重劃區與捷運沿線最新脈動。</p>
+                <p>在地深耕、實戰經驗豐富，掌握市區最新脈動與重劃區、捷運沿線行情變化。</p>
               </div>
               <div className="area-card">
                 <div className="area-icon"><PinIcon /></div>
                 <h3>屏東市</h3>
                 <p>在地經營、口碑扎根，提供屏東市買賣租賃第一手物件資訊與客製化服務。</p>
+              </div>
+              <div className="area-card area-card-extend">
+                <div className="area-icon"><GlobeIcon /></div>
+                <h3>高屏以外</h3>
+                <p>外縣市的物件想委託或想了解行情，一樣歡迎與我聯繫，協助您評估並媒合合適的在地夥伴。</p>
               </div>
             </div>
           </div>
@@ -372,8 +407,10 @@ export default function SiteHome() {
               {AWARDS.map((award) => (
                 <div className="award-card" key={award.title}>
                   <div className="award-icon"><TrophyIcon /></div>
-                  <p className="award-org">{award.org}</p>
-                  <h3>{award.title}</h3>
+                  <div className="award-body">
+                    <p className="award-org">{award.org}</p>
+                    <h3>{award.title}</h3>
+                  </div>
                 </div>
               ))}
             </div>
@@ -398,24 +435,61 @@ export default function SiteHome() {
                 ))}
               </div>
               <blockquote>
-                「我覺得這樣的成交，比單純賣掉更重要。謝謝您把案子交給我信任。後續由代書接手處理，群組裡有任何問題都可以隨時詢問。」
+                太好了！小飛，很感謝妳，也很高興妳幫我們的房子找到新主人，一切都是很好的緣份，皆大歡喜～
               </blockquote>
-              <p className="testimonial-reply">
-                太好了！小飛 很感謝妳，也很高興妳幫我們的房子找到新主人，一切都是很好的緣份，皆大歡喜～
-              </p>
+              <p className="testimonial-author">— 成交屋主</p>
+              <div className="testimonial-mine">
+                <span className="testimonial-mine-label">小飛的回覆</span>
+                <p>我覺得這樣的成交，比單純賣掉更重要。謝謝您把案子交給我信任。後續由代書接手處理，群組裡有任何問題都可以隨時詢問。</p>
+              </div>
             </div>
 
             <div className="video-showcase">
               <p className="video-showcase-title">短影音累積曝光・成績亮眼</p>
               <div className="video-grid">
-                {VIDEOS.map((video) => (
-                  <div className="video-card" key={video.name}>
-                    <span className="video-play">▶</span>
-                    <p className="video-name">{video.name}</p>
-                    <p className="video-views">{video.views} 觀看次數</p>
-                  </div>
-                ))}
+                {VIDEOS.map((video) => {
+                  const inner = (
+                    <>
+                      <span className="video-play">▶</span>
+                      <p className="video-name">{video.name}</p>
+                      {video.views && (
+                        <p className="video-views">{video.views} 觀看次數</p>
+                      )}
+                    </>
+                  );
+                  return video.url ? (
+                    <a
+                      className="video-card video-card-link"
+                      key={video.name}
+                      href={video.url}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
+                      {inner}
+                    </a>
+                  ) : (
+                    <div className="video-card" key={video.name}>{inner}</div>
+                  );
+                })}
               </div>
+
+              {PLATFORMS.some((platform) => platform.url) && (
+                <div className="platform-row">
+                  <span className="platform-label">追蹤我的社群</span>
+                  <div className="platform-links">
+                    {PLATFORMS.filter((platform) => platform.url).map((platform) => (
+                      <a
+                        key={platform.name}
+                        href={platform.url}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                      >
+                        {platform.name}
+                      </a>
+                    ))}
+                  </div>
+                </div>
+              )}
             </div>
 
             <div className="media-highlight">

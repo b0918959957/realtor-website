@@ -11,8 +11,8 @@ export const PROFILE = {
   photoUrl: "/card/liu-yufei.jpg",
   social: {
     line: "https://line.me/R/ti/p/@wyb2506c",
-    facebook: "",
-    instagram: "",
-    youtube: ""
+    facebook: "https://www.facebook.com/liu.yu.fei.354146",
+    instagram: "https://www.instagram.com/taiwandim/",
+    youtube: "https://www.youtube.com/channel/UCJsR5swTU7oMCotIEl4L84g"
   }
 } as const;
