@@ -469,7 +469,7 @@ export default function SiteHome() {
                 rel="noopener noreferrer"
               >
                 <span className="hero-intro-play" aria-hidden="true">▶</span>
-                決定委託前，先花一分鐘認識我
+                1 分鐘影片｜先認識我再決定
               </a>
             </div>
             <div className="hero-photo">

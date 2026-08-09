@@ -1373,34 +1373,60 @@
 }
 
 /* ── Hero 的「先認識我」連結 ───────────────────── */
+/* 自我介紹影片入口：做成看得出可以點的膠囊，而不是像註解的小字 */
 .site-root .hero-intro-link {
   display: inline-flex;
   align-items: center;
-  gap: 10px;
-  margin-top: 22px;
-  color: rgba(255, 255, 255, 0.82);
-  font-size: 0.95rem;
-  font-weight: 500;
-  padding-bottom: 3px;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.28);
-  transition: color 0.2s ease, border-color 0.2s ease, gap 0.2s ease;
+  gap: 12px;
+  margin-top: 26px;
+  padding: 8px 22px 8px 8px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.10);
+  border: 1px solid rgba(255, 255, 255, 0.24);
+  backdrop-filter: blur(6px);
+  color: #fff;
+  font-size: 0.98rem;
+  font-weight: 600;
+  transition: background 0.25s ease, border-color 0.25s ease, transform 0.25s ease;
 }
 .site-root .hero-intro-link:hover {
-  color: #fff;
+  background: rgba(255, 255, 255, 0.18);
   border-color: var(--foresight-secondary-orange);
-  gap: 14px;
+  transform: translateY(-2px);
 }
 .site-root .hero-intro-play {
+  position: relative;
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  width: 26px;
-  height: 26px;
+  width: 34px;
+  height: 34px;
   border-radius: 50%;
   background: var(--foresight-secondary-orange);
   color: #fff;
-  font-size: 0.6rem;
+  font-size: 0.72rem;
   flex-shrink: 0;
+}
+/* 播放鍵外圈持續擴散，讓視線在滑過去時被勾住 */
+.site-root .hero-intro-play::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  border: 2px solid var(--foresight-secondary-orange);
+  animation: heroPlayPulse 2.4s ease-out infinite;
+}
+@keyframes heroPlayPulse {
+  0%   { transform: scale(1);    opacity: 0.75; }
+  70%  { transform: scale(1.75); opacity: 0; }
+  100% { transform: scale(1.75); opacity: 0; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .site-root .hero-intro-play::after { animation: none; }
+}
+/* 手機版膠囊較高，會壓到底部的捲動提示，補間距讓兩者不重疊 */
+@media (max-width: 768px) {
+  .site-root .hero-intro-link { margin-bottom: 46px; }
 }
 
 /* 收尾標語：兩行更好讀 */
