@@ -103,6 +103,8 @@
   color: var(--gray-700);
   max-width: 620px;
   font-size: 1rem;
+  /* 讓瀏覽器把幾行字排得一樣長，避免最後一行只剩「質。」這種孤字 */
+  text-wrap: balance;
 }.site-root .section-desc-light { color: rgba(255, 255, 255, 0.78); }.site-root section { padding: 90px 0; }.site-root .site-header {
   position: fixed;
   top: 0; left: 0; right: 0;

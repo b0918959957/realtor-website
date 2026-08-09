@@ -98,7 +98,7 @@ const FEATURES = [
   },
   {
     title: "誠信服務・全程陪伴",
-    text: "從委託、行銷、帶看、議價到交屋，主動回報每個進度，讓您安心每一步。",
+    text: "從委託、行銷、帶看、議價到交屋，全程使用履約保證，主動回報每個進度，讓您安心每一步。",
     icon: (
       <svg viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="currentColor" strokeWidth="1.8" aria-hidden="true">
         <path d="M12 21s-7-4.35-9.5-9C.6 8.1 2.6 4 6.5 4 9 4 11 5.7 12 7c1-1.3 3-3 5.5-3 3.9 0 5.9 4.1 4 8-2.5 4.65-9.5 9-9.5 9z" />
@@ -280,7 +280,7 @@ const SERVICES = [
   {
     title: "稅務諮詢",
     accent: "#12897E", // 帳務・青綠
-    text: "協助釐清房地合一稅、契稅、印花稅等相關規定，讓交易過程安心透明。",
+    text: "協助釐清房地合一稅、重購退稅等相關稅法規定，讓交易過程安心透明。",
     icon: (
       <svg viewBox="0 0 24 24" width="34" height="34" fill="none" stroke="currentColor" strokeWidth="1.6" aria-hidden="true">
         <path d="M4 4h16v16H4z" />
