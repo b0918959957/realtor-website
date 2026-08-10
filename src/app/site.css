@@ -2169,3 +2169,60 @@
   line-height: 1.8;
   color: var(--gray-700);
 }
+
+/* ---------- 精簡版：卡片標題（不再有 A/B/C 步驟圓圈） ---------- */
+.site-root .pa-card-head { display: block; }
+.site-root .pa-card-head h3 { font-size: 1.1rem; }
+
+/* ---------- 大輸入框：主流程的三個關鍵數字 ---------- */
+.site-root .pa-input.big input { padding: 14px 14px; font-size: 1.25rem; font-weight: 700; }
+
+/* ---------- 摺疊區塊 ---------- */
+.site-root .pa-fold {
+  background: #fff;
+  border: 1px solid #E6EAF0;
+  border-radius: var(--radius);
+  box-shadow: var(--shadow-sm);
+  overflow: hidden;
+}
+.site-root .pa-fold-head {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 15px 18px;
+  background: transparent;
+  border: 0;
+  cursor: pointer;
+  font-family: inherit;
+  text-align: left;
+  color: var(--ink);
+}
+.site-root .pa-fold-head span { font-size: 0.95rem; font-weight: 700; }
+.site-root .pa-fold-head em {
+  display: block;
+  font-style: normal;
+  font-size: 0.78rem;
+  font-weight: 500;
+  color: var(--gray-500);
+  margin-top: 2px;
+}
+.site-root .pa-fold-head i {
+  flex: 0 0 26px;
+  height: 26px;
+  border-radius: 50%;
+  background: var(--gray-100);
+  color: var(--foresight-primary-navy);
+  display: grid;
+  place-items: center;
+  font-size: 0.95rem;
+  font-weight: 800;
+  font-style: normal;
+}
+.site-root .pa-fold.open .pa-fold-head { border-bottom: 1px solid #EEF1F6; background: #FBFCFE; }
+.site-root .pa-fold.open .pa-fold-head i { background: var(--foresight-primary-navy); color: #fff; }
+.site-root .pa-fold-body { padding: 16px 18px 20px; display: grid; gap: 14px; }
+
+/* 結果區裡的摺疊，視覺再輕一點 */
+.site-root .pa-results .pa-fold { box-shadow: none; }

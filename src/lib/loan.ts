@@ -28,59 +28,38 @@ export function toWan(yuan: number): string {
 
 /* -------------------------------------------------------------- 型別定義 */
 
+/**
+ * 只留真正會改變計算結果的欄位。
+ * 姓名、職業、縣市、婚姻、子女這些不影響數字，問了只會讓人不想填完。
+ */
 export type Basic = {
-  age: number;
-  married: boolean;
-  jointApply: boolean;
-  hasChildren: boolean;
-  childCount: number;
-  occupation: string;
-  jobYears: number;
-  city: string;
-  selfEmployed: boolean;
-  hasPayrollTransfer: boolean;
-  /** 這是名下第幾戶房貸：1 / 2 / 3（3 代表三戶以上） */
-  houseOrder: 1 | 2 | 3;
-  /** 既有房貸是否仍在繳款中 */
-  existingMortgageActive: boolean;
+  /** 名下已有幾戶「還在繳」的房貸：0 / 1 / 2（2 代表兩戶以上） */
+  ownedMortgages: 0 | 1 | 2;
   /** 這次購屋是否為自住 */
   ownerOccupied: boolean;
+  /** 年齡，只用來檢查 80 條款；0 表示不填 */
+  age: number;
+  /** 收入類型，決定認列比例的預設值 */
+  incomeType: IncomeType;
 };
 
-export type Income = {
-  selfSalary: number;
-  spouseSalary: number;
-  bonusMonthly: number;
-  yearEndBonus: number;
-  rent: number;
-  dividend: number;
-  other: number;
+export type IncomeType = "salary" | "selfEmployed" | "unstable";
+
+export const INCOME_TYPE_LABEL: Record<IncomeType, { label: string; hint: string; ratio: number }> = {
+  salary: { label: "固定薪水", hint: "有薪轉紀錄，銀行全額認列", ratio: 100 },
+  selfEmployed: { label: "自營／接案", hint: "銀行通常打七折認列", ratio: 70 },
+  unstable: { label: "獎金或不固定", hint: "波動大，認列更保守", ratio: 60 }
 };
 
-export type IncomeRatios = {
-  selfSalary: number;
-  spouseSalary: number;
-  bonusMonthly: number;
-  yearEndBonus: number;
-  rent: number;
-  dividend: number;
-  other: number;
-};
-
-export type Debts = {
-  credit: number;
-  car: number;
-  student: number;
-  card: number;
-  mortgage: number;
-  otherDebt: number;
-};
-
-export type Living = {
-  daily: number;
-  support: number;
-  insurance: number;
-  otherFixed: number;
+export type Money = {
+  /** 家庭每月實際入袋收入（含配偶） */
+  income: number;
+  /** 每月要還的各種貸款合計（信貸、車貸、學貸、卡循、其他房貸） */
+  debtPayment: number;
+  /** 每月生活開銷合計（含保險、孝親、育兒） */
+  livingCost: number;
+  /** 銀行認列比例 %，預設依收入類型帶入 */
+  recognizeRatio: number;
 };
 
 export type Purchase = {
@@ -104,59 +83,11 @@ export type Purchase = {
 
 export type Level = "green" | "yellow" | "orange" | "red";
 
-/* ------------------------------------------------------------ 預設認列比例 */
-
-/**
- * 銀行不會把自報收入全額採計，穩定度越低折得越兇。
- * 這裡給的是常見概估值，實際依各銀行與申請人條件而定。
- */
-export function defaultRatios(basic: Pick<Basic, "selfEmployed" | "hasPayrollTransfer">): IncomeRatios {
-  const salary = basic.selfEmployed ? 70 : basic.hasPayrollTransfer ? 100 : 80;
-  return {
-    selfSalary: salary,
-    spouseSalary: 100,
-    bonusMonthly: 70,
-    yearEndBonus: 60,
-    rent: 70,
-    dividend: 65,
-    other: 60
-  };
-}
-
 /* ---------------------------------------------------------------- 收入彙總 */
 
-/** 家庭實際入袋的月收入（不打折，用來算生活壓力） */
-export function rawMonthlyIncome(inc: Income, joint: boolean): number {
-  return (
-    inc.selfSalary +
-    (joint ? inc.spouseSalary : 0) +
-    inc.bonusMonthly +
-    inc.yearEndBonus / 12 +
-    inc.rent +
-    inc.dividend +
-    inc.other
-  );
-}
-
 /** 銀行認列後的月收入（打折，用來算核貸機率） */
-export function recognizedMonthlyIncome(inc: Income, r: IncomeRatios, joint: boolean): number {
-  return (
-    (inc.selfSalary * r.selfSalary) / 100 +
-    (joint ? (inc.spouseSalary * r.spouseSalary) / 100 : 0) +
-    (inc.bonusMonthly * r.bonusMonthly) / 100 +
-    ((inc.yearEndBonus / 12) * r.yearEndBonus) / 100 +
-    (inc.rent * r.rent) / 100 +
-    (inc.dividend * r.dividend) / 100 +
-    (inc.other * r.other) / 100
-  );
-}
-
-export function totalDebts(d: Debts): number {
-  return d.credit + d.car + d.student + d.card + d.mortgage + d.otherDebt;
-}
-
-export function totalLiving(l: Living): number {
-  return l.daily + l.support + l.insurance + l.otherFixed;
+export function recognizedMonthlyIncome(m: Money): number {
+  return (m.income * m.recognizeRatio) / 100;
 }
 
 /* ------------------------------------------------------------------ 房貸 */
@@ -314,30 +245,33 @@ export type LtvRange = {
 };
 
 /**
- * 依名下第幾戶給「區間」而不是固定數字。
+ * 依「名下還在繳的房貸戶數」給區間，而不是給固定數字。
  *
  * 法規錨點：央行 115.3.19 理監事會決議、115.3.20 生效之
  * 「中央銀行對金融機構辦理不動產抵押貸款業務規定」——
  * 第 2 戶最高 6 成且無寬限期、第 3 戶以上最高 3 成且無寬限期。
- * 區間下緣則是市場實務的保守抓法，實際仍依銀行政策與個人條件而定。
+ *
+ * 關鍵：依同規定問與答，原有房貸已取得清償證明並塗銷抵押權、經銀行查證屬實者，
+ * 可排除房貸戶數之計算。所以已繳清的那戶不算在 ownedMortgages 裡，
+ * 這次購屋就回到第 1 戶的條件。
  */
-export function suggestedLtv(order: 1 | 2 | 3, ownerOccupied: boolean): LtvRange {
-  if (order === 1) {
+export function suggestedLtv(ownedMortgages: 0 | 1 | 2, ownerOccupied: boolean): LtvRange {
+  if (ownedMortgages === 0) {
     return {
       low: 70,
       high: 80,
-      note: "第一戶自住條件最好，體質好有機會到 8 成，但不是保證。",
+      note: "名下沒有還在繳的房貸，這次算第 1 戶，條件最好，體質好有機會到 8 成。",
       regCap: null,
       graceBanned: false
     };
   }
-  if (order === 2) {
+  if (ownedMortgages === 1) {
     return {
       low: 50,
       high: 60,
       note: ownerOccupied
-        ? "央行規定第 2 戶最高 6 成，且不得有寬限期（115.3.20 起）。"
-        : "非自住會被抓得更緊，央行對第 2 戶的上限是 6 成，且不得有寬限期。",
+        ? "名下有 1 戶還在繳，這次算第 2 戶：央行上限 6 成，且不得有寬限期（115.3.20 起）。"
+        : "非自住會被抓得更緊。這次算第 2 戶，央行上限 6 成，且不得有寬限期。",
       regCap: 60,
       graceBanned: true
     };
@@ -345,7 +279,7 @@ export function suggestedLtv(order: 1 | 2 | 3, ownerOccupied: boolean): LtvRange
   return {
     low: 25,
     high: 30,
-    note: "央行規定第 3 戶以上最高 3 成，且不得有寬限期，部分銀行甚至不承作。",
+    note: "這次算第 3 戶以上：央行上限 3 成，且不得有寬限期，部分銀行甚至不承作。",
     regCap: 30,
     graceBanned: true
   };

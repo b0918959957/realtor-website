@@ -117,7 +117,7 @@ export function advice(a: AssessInput): string[] {
   /* 銀行版 vs 生活版的落差 */
   if (a.bank.dti <= 50 && a.life.dti > 85) {
     tips.push(
-      `銀行版收支比 ${a.bank.dti.toFixed(0)}% 看起來過得去，但把生活費、保險這些銀行看不到的支出加回去之後是 ${a.life.dti.toFixed(0)}%。` +
+      `銀行版收支比 ${a.bank.dti.toFixed(0)}% 看起來過得去，但把生活費這些銀行看不到的支出加回去之後是 ${a.life.dti.toFixed(0)}%。` +
         `銀行願意貸，不代表你的日子好過——這中間的差距要由你自己承擔。`
     );
   }
@@ -130,11 +130,9 @@ export function advice(a: AssessInput): string[] {
           `不然只要有一次意外支出就會很難處理。`
       );
     } else {
-      const detail = basic.hasChildren
-        ? `你有 ${basic.childCount || 1} 位未成年子女，教育與醫療的變動支出通常會比預估多`
-        : `如果之後有換車、生小孩或家人醫療需求，這個數字會再被吃掉一塊`;
       tips.push(
-        `扣掉房貸與固定支出後，每月剩下約 ${money(a.surplus)}。${detail}。` +
+        `扣掉房貸與固定支出後，每月剩下約 ${money(a.surplus)}。` +
+          `如果之後有換車、生小孩或家人醫療需求，這個數字會再被吃掉一塊。` +
           (a.comfortHigh > 0 && purchase.price > a.comfortHigh
             ? `以你目前的條件，總價抓在 ${toWan(a.comfortHigh * 10000)} 萬以內生活會比較有彈性。`
             : `以你目前的條件，這個水位還算守得住。`)
@@ -151,56 +149,44 @@ export function advice(a: AssessInput): string[] {
     );
   }
 
-  /* 80 條款 */
-  if (basic.age > 0 && basic.age + purchase.years > 80) {
-    tips.push(
-      `你的年齡 ${basic.age} 加上貸款年限 ${purchase.years} 年等於 ${basic.age + purchase.years}，超過多數銀行的「80 條款」（年齡＋年限 ≤ 80）。` +
-        `年限可能會被砍短，月付會跟著變高，這點要先算進去。`
-    );
-  }
-
-  /* 自營業 */
-  if (basic.selfEmployed) {
-    tips.push(
-      `自營收入銀行通常只認列七成左右，帳面收入和銀行看到的收入會有落差。` +
-        `報稅資料、扣繳憑單與存摺往來越完整，認列比例越有機會拉高。`
-    );
-  } else if (!basic.hasPayrollTransfer) {
-    tips.push(
-      `沒有固定薪轉的話，銀行對收入的認列會比較保守。` +
-        `送件前先把薪資入帳紀錄整理好，對成數和利率都有幫助。`
-    );
-  }
-
-  /* 年資 */
-  if (basic.jobYears > 0 && basic.jobYears < 1) {
-    tips.push(`目前年資未滿 1 年，部分銀行會要求滿一年或加保人。如果不急，等年資滿一年再送件條件通常會好一些。`);
-  }
-
   /* 戶數與成數：很多人不是買不起，是卡在這裡 */
   const { low, high, note, regCap } = a.ltvRange;
 
-  if (basic.houseOrder === 2 && basic.existingMortgageActive) {
+  if (basic.ownedMortgages === 1) {
     tips.push(
-      `你第 1 戶房貸還在繳，又要買第 2 戶。如果實際上是「先買後賣」的換屋自住，` +
-        `可以跟銀行切結：撥款後 18 個月內把第 1 戶賣掉、清償並塗銷抵押權，就能不受 6 成上限與無寬限期的限制。` +
-        `這條路能不能走、怎麼談，是這個案子最值錢的地方，建議直接找我談。`
+      `你名下有 1 戶房貸還在繳，這次會被算成第 2 戶。如果實際上是「先買後賣」的換屋自住，` +
+        `可以跟銀行切結：撥款後 18 個月內把原本那戶賣掉、清償並塗銷抵押權，就能不受 6 成上限與無寬限期的限制。` +
+        `這條路能不能走、怎麼談，是這個案子最值錢的地方。`
     );
   }
 
   if (regCap !== null && purchase.ltv > regCap) {
     tips.push(
-      `你抓的是 ${purchase.ltv} 成，但以${basic.houseOrder === 1 ? "第一戶" : basic.houseOrder === 2 ? "第二戶" : "第三戶以上"}來說，` +
-        `我會建議先用 ${low}~${high} 成試算。${note}成數抓太滿，自備款會突然差一大截。`
+      `你抓的是 ${purchase.ltv} 成，但央行對這一戶的上限是 ${regCap / 10} 成。${note}` +
+        `成數抓太滿，自備款會突然差一大截。`
     );
-  } else if (basic.houseOrder >= 2) {
-    tips.push(`${note}實際成數會依銀行政策、收支比與信用狀況調整，不是固定數字，這裡一律先抓保守的。`);
+  } else if (purchase.ltv > high) {
+    tips.push(`你抓的是 ${purchase.ltv} 成，我會建議先用 ${low}~${high} 成試算。${note}`);
   }
 
-  if (basic.houseOrder >= 2 && basic.existingMortgageActive && debtMortgageMissing(a)) {
+  /* 收入認列 */
+  if (basic.incomeType === "selfEmployed") {
     tips.push(
-      `你有房貸還在繳，但「既有房貸月付」那格是 0。這一格空著整份試算都會失真——` +
-        `銀行最在意的就是你每個月總共要還多少，記得補上去。`
+      `自營收入銀行通常只認列七成左右，帳面收入和銀行看到的收入會有落差。` +
+        `報稅資料、扣繳憑單與存摺往來越完整，認列比例越有機會拉高。`
+    );
+  } else if (basic.incomeType === "unstable") {
+    tips.push(
+      `收入以獎金或不固定項目為主的話，銀行會抓得比較保守。` +
+        `把近一兩年的入帳紀錄整理齊全，對成數和利率都有幫助。`
+    );
+  }
+
+  /* 80 條款 */
+  if (basic.age > 0 && basic.age + purchase.years > 80) {
+    tips.push(
+      `你的年齡 ${basic.age} 加上貸款年限 ${purchase.years} 年等於 ${basic.age + purchase.years}，超過多數銀行的「80 條款」（年齡＋年限 ≤ 80）。` +
+        `年限可能會被砍短，月付會跟著變高，這點要先算進去。`
     );
   }
 
@@ -211,9 +197,4 @@ export function advice(a: AssessInput): string[] {
   );
 
   return tips;
-}
-
-/** 說有房貸在繳、卻沒填既有房貸月付 */
-function debtMortgageMissing(a: AssessInput): boolean {
-  return a.debtPayments <= 0;
 }
