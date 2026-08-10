@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import {
   type Basic,
   type FeeItem,
@@ -159,9 +159,26 @@ function Fold({
   children: React.ReactNode;
 }) {
   const [open, setOpen] = useState(false);
+  const ref = useRef<HTMLDivElement>(null);
+
+  // 展開後把整塊捲進畫面。不做的話，如果標題原本就在螢幕底部，
+  // 內容會長在看不見的地方，使用者會以為「點了沒反應」。
+  const toggle = () => {
+    const next = !open;
+    setOpen(next);
+    if (next) {
+      requestAnimationFrame(() => {
+        const el = ref.current;
+        if (!el) return;
+        const top = el.getBoundingClientRect().top + window.scrollY - 88;
+        window.scrollTo({ top, behavior: "smooth" });
+      });
+    }
+  };
+
   return (
-    <div className={`pa-fold${open ? " open" : ""}`}>
-      <button type="button" className="pa-fold-head" onClick={() => setOpen((v) => !v)}>
+    <div className={`pa-fold${open ? " open" : ""}`} ref={ref}>
+      <button type="button" className="pa-fold-head" onClick={toggle}>
         <span>
           {title}
           {hint && <em>{hint}</em>}
@@ -314,6 +331,22 @@ export default function PurchaseAdvisor({ contactHref }: { contactHref: string }
           <Row label="家庭月收入" hint="含配偶，實際入袋的">
             <NumInput big value={m.income} onChange={(v) => setM("income", v)} suffix="元" />
           </Row>
+          <Row label="這筆收入的性質" hint="銀行不是每種收入都全額採計">
+            <Segmented<IncomeType>
+              value={basic.incomeType}
+              onChange={(v) => setB("incomeType", v)}
+              options={(Object.keys(INCOME_TYPE_LABEL) as IncomeType[]).map((k) => ({
+                label: INCOME_TYPE_LABEL[k].label,
+                value: k
+              }))}
+            />
+          </Row>
+          {basic.incomeType !== "salary" && (
+            <p className="pa-inline-note">
+              {INCOME_TYPE_LABEL[basic.incomeType].hint}。銀行認列後只剩{" "}
+              <strong>{money(r.recognized)}</strong>，核貸是用這個數字算的。
+            </p>
+          )}
           <Row label="每月要還的貸款" hint="信貸、車貸、學貸、卡循加總；沒有就填 0">
             <NumInput big value={m.debtPayment} onChange={(v) => setM("debtPayment", v)} suffix="元" />
           </Row>
@@ -386,8 +419,14 @@ export default function PurchaseAdvisor({ contactHref }: { contactHref: string }
         </Fold>
 
         <Fold
-          title="寬限期與收入認列"
-          hint={basic.ownedMortgages >= 1 ? "這一戶不能有寬限期" : purchase.useGrace ? `寬限 ${purchase.graceYears} 年` : "未使用"}
+          title="要用寬限期嗎？"
+          hint={
+            basic.ownedMortgages >= 1
+              ? "這一戶不能有寬限期"
+              : purchase.useGrace
+                ? `已設定 ${purchase.graceYears} 年`
+                : "目前不使用"
+          }
         >
           {r.ltvRange.graceBanned ? (
             <div className="pa-rule-box">
@@ -425,22 +464,6 @@ export default function PurchaseAdvisor({ contactHref }: { contactHref: string }
             </>
           )}
 
-          <Row label="收入類型" hint="影響銀行認列多少">
-            <Segmented<IncomeType>
-              value={basic.incomeType}
-              onChange={(v) => setB("incomeType", v)}
-              options={(Object.keys(INCOME_TYPE_LABEL) as IncomeType[]).map((k) => ({
-                label: INCOME_TYPE_LABEL[k].label,
-                value: k
-              }))}
-            />
-          </Row>
-
-          <p className="pa-note">
-            {INCOME_TYPE_LABEL[basic.incomeType].hint}（認列 {m.recognizeRatio}%），
-            認列後月收入 <strong>{money(r.recognized)}</strong>。
-            實際比例依各銀行與申請人條件不同，本工具僅為試算。
-          </p>
         </Fold>
 
         <Fold title="交屋前要準備的現金" hint={`約 ${toWan(r.cashNeeded)} 萬`}>

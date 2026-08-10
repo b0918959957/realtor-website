@@ -2226,3 +2226,15 @@
 
 /* 結果區裡的摺疊，視覺再輕一點 */
 .site-root .pa-results .pa-fold { box-shadow: none; }
+
+/* 欄位下方的即時說明（例如自營收入被打折後的實際認列） */
+.site-root .pa-inline-note {
+  font-size: 0.82rem;
+  line-height: 1.75;
+  color: var(--gray-700);
+  background: var(--lv-yellow-bg);
+  border-radius: 8px;
+  padding: 10px 12px;
+  margin-top: -4px;
+}
+.site-root .pa-inline-note strong { color: var(--lv-yellow); font-weight: 800; }
