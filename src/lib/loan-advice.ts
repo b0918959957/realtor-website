@@ -169,6 +169,14 @@ export function advice(a: AssessInput): string[] {
     tips.push(`你抓的是 ${purchase.ltv} 成，我會建議先用 ${low}~${high} 成試算。${note}`);
   }
 
+  /* 高價住宅：另有一套更嚴的規定 */
+  if (purchase.price >= 4000) {
+    tips.push(
+      `這個總價會碰到「高價住宅」的認定（台北市 7,000 萬、新北市 6,000 萬、其他地區 4,000 萬以上）。` +
+        `高價住宅貸款央行上限是 3 成且不得有寬限期，跟一般購屋差很多。這種案子建議直接找我談，不要照上面的數字抓。`
+    );
+  }
+
   /* 收入認列 */
   if (basic.incomeType === "selfEmployed") {
     tips.push(

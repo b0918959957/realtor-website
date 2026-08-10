@@ -156,6 +156,17 @@ export type FeeItem = {
 };
 
 /**
+ * 課稅現值佔成交總價的概估比例。
+ *
+ * 契稅、印花稅、登記規費的稅基都不是成交價，而是房屋評定現值與土地公告現值，
+ * 這些數字通常遠低於市價。直接拿總價乘稅率會把稅費灌水好幾倍，
+ * 所以先折算成課稅現值再算。實際比例因地區、屋齡差很多，使用者可自行改金額。
+ */
+const ASSESSED_RATIO = 0.15;
+/** 契稅只課建物，房屋評定現值再抓課稅現值的三分之二左右 */
+const BUILDING_RATIO = 0.1;
+
+/**
  * 買房不是只有頭期款。以下稅費為概估值，實際依物件、地區、銀行方案而異，
  * 使用者可自行修改每一項金額。
  */
@@ -168,16 +179,27 @@ export function defaultFees(args: {
   emergencyMonths: number;
 }): FeeItem[] {
   const { priceYuan, downPayment, principal, monthlyOutgo, renovationYuan, emergencyMonths } = args;
+  const assessed = priceYuan * ASSESSED_RATIO;
   return [
     { key: "down", label: "頭期款", note: "總價 − 貸款金額", amount: Math.max(downPayment, 0) },
-    { key: "deed", label: "契稅", note: "以房屋評定現值概估，約總價 0.6%", amount: priceYuan * 0.006 },
+    {
+      key: "deed",
+      label: "契稅",
+      note: "房屋評定現值 × 6%（評定現值以總價一成概估）",
+      amount: priceYuan * BUILDING_RATIO * 0.06
+    },
     {
       key: "stamp",
       label: "印花稅",
-      note: "稅率 0.1%，稅基為公告土地現值＋房屋評定現值，此處以總價概估",
-      amount: priceYuan * 0.001
+      note: "契價 × 0.1%（稅基為房屋評定現值＋土地公告現值，非成交價）",
+      amount: assessed * 0.001
     },
-    { key: "register", label: "登記規費", note: "約總價 0.1%～0.2%，此處抓 0.1%", amount: priceYuan * 0.001 },
+    {
+      key: "register",
+      label: "登記規費",
+      note: "申報價值 × 0.1%（稅基同上，非成交價）",
+      amount: assessed * 0.001
+    },
     { key: "scrivener", label: "代書費", note: "買賣過戶＋設定，概估定額", amount: 25000 },
     { key: "agency", label: "仲介服務費", note: "買方常見約總價 1~2%，此處抓 2%", amount: priceYuan * 0.02 },
     { key: "setup", label: "房貸設定相關費用", note: "設定規費＋開辦費概估", amount: principal * 0.0012 + 8000 },

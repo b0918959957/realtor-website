@@ -45,7 +45,8 @@ const INIT_MONEY: Money = {
 const INIT_PURCHASE: Purchase = {
   price: 1000,
   ltv: 80,
-  rate: 2.3,
+  // 五大行庫新承做房貸加權平均利率（央行，2026/7：2.322%）
+  rate: 2.32,
   years: 30,
   useGrace: false,
   graceYears: 3,
@@ -356,7 +357,7 @@ export default function PurchaseAdvisor({ contactHref }: { contactHref: string }
           )}
 
           <div className="pa-grid-2">
-            <Row label="貸款利率">
+            <Row label="貸款利率" hint="五大行庫平均 2.32%">
               <NumInput value={purchase.rate} onChange={(v) => setP("rate", v)} suffix="%" max={20} />
             </Row>
             <Row label="貸款年限">
