@@ -692,6 +692,19 @@ export default function SiteHome() {
               拉一拉就知道每月要繳多少、自備款要準備多少。看不懂或想知道自己實際能貸多少，直接問我。
             </p>
             <LoanCalculator contactHref="#contact" />
+
+            <div className="calc-upsell">
+              <div>
+                <p className="calc-upsell-title">還想知道「買下去會不會太硬」？</p>
+                <p className="calc-upsell-desc">
+                  加上收入、負債與生活費，算出銀行版與生活版收支比、交屋前要準備多少現金，
+                  以及你比較適合看的總價區間。
+                </p>
+              </div>
+              <Link className="btn btn-primary" href="/loan">
+                小飛買房貸款試算 →
+              </Link>
+            </div>
           </div>
         </section>
 
