@@ -190,11 +190,11 @@ export function advice(a: AssessInput): string[] {
     );
   }
 
-  /* 80 條款 */
-  if (basic.age > 0 && basic.age + purchase.years > 80) {
+  /* 年限提醒：多數銀行有「年齡＋年限 ≤ 80」的內規 */
+  if (purchase.years >= 35) {
     tips.push(
-      `你的年齡 ${basic.age} 加上貸款年限 ${purchase.years} 年等於 ${basic.age + purchase.years}，超過多數銀行的「80 條款」（年齡＋年限 ≤ 80）。` +
-        `年限可能會被砍短，月付會跟著變高，這點要先算進去。`
+      `你抓 ${purchase.years} 年。多數銀行有「年齡＋貸款年限 ≤ 80」的內規，` +
+        `年紀較長的話年限可能會被砍短，月付就會跟著變高。要不要拉這麼長，可以先問我。`
     );
   }
 

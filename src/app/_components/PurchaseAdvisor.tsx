@@ -30,8 +30,6 @@ import { advice, assess } from "@/lib/loan-advice";
 
 const INIT_BASIC: Basic = {
   ownedMortgages: 0,
-  ownerOccupied: true,
-  age: 0,
   incomeType: "salary"
 };
 
@@ -266,7 +264,7 @@ export default function PurchaseAdvisor({ contactHref }: { contactHref: string }
       reservesYuan: reserves
     });
 
-    const ltvRange = suggestedLtv(basic.ownedMortgages, basic.ownerOccupied);
+    const ltvRange = suggestedLtv(basic.ownedMortgages);
 
     const input = {
       basic,
@@ -379,16 +377,6 @@ export default function PurchaseAdvisor({ contactHref }: { contactHref: string }
               ]}
             />
           </Row>
-          <Row label="這次是自住嗎">
-            <Segmented
-              value={basic.ownerOccupied}
-              onChange={(v) => setB("ownerOccupied", v)}
-              options={[
-                { label: "自住", value: true },
-                { label: "非自住", value: false }
-              ]}
-            />
-          </Row>
           <div className="pa-ltv-hint">
             <p>
               建議先用 <strong>{r.ltvRange.low}~{r.ltvRange.high} 成</strong> 試算
@@ -448,31 +436,11 @@ export default function PurchaseAdvisor({ contactHref }: { contactHref: string }
             />
           </Row>
 
-          <div className="pa-ratio">
-            <div className="pa-ratio-head">
-              <span>銀行認列比例</span>
-              <strong>{m.recognizeRatio}%</strong>
-            </div>
-            <input
-              type="range"
-              min={40}
-              max={100}
-              step={5}
-              value={m.recognizeRatio}
-              onChange={(e) => {
-                setRatioTouched(true);
-                setM("recognizeRatio", Number(e.target.value));
-              }}
-            />
-            <p className="pa-note">
-              {INCOME_TYPE_LABEL[basic.incomeType].hint}。認列後月收入{" "}
-              <strong>{money(r.recognized)}</strong>。實際比例依各銀行與申請人條件不同，本工具僅為試算。
-            </p>
-          </div>
-
-          <Row label="年齡" hint="選填，用來檢查 80 條款">
-            <NumInput value={basic.age} onChange={(v) => setB("age", v)} suffix="歲" max={100} />
-          </Row>
+          <p className="pa-note">
+            {INCOME_TYPE_LABEL[basic.incomeType].hint}（認列 {m.recognizeRatio}%），
+            認列後月收入 <strong>{money(r.recognized)}</strong>。
+            實際比例依各銀行與申請人條件不同，本工具僅為試算。
+          </p>
         </Fold>
 
         <Fold title="交屋前要準備的現金" hint={`約 ${toWan(r.cashNeeded)} 萬`}>

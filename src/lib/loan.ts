@@ -35,11 +35,7 @@ export function toWan(yuan: number): string {
 export type Basic = {
   /** 名下已有幾戶「還在繳」的房貸：0 / 1 / 2（2 代表兩戶以上） */
   ownedMortgages: 0 | 1 | 2;
-  /** 這次購屋是否為自住 */
-  ownerOccupied: boolean;
-  /** 年齡，只用來檢查 80 條款；0 表示不填 */
-  age: number;
-  /** 收入類型，決定認列比例的預設值 */
+  /** 收入類型，決定銀行認列比例 */
   incomeType: IncomeType;
 };
 
@@ -277,7 +273,7 @@ export type LtvRange = {
  * 可排除房貸戶數之計算。所以已繳清的那戶不算在 ownedMortgages 裡，
  * 這次購屋就回到第 1 戶的條件。
  */
-export function suggestedLtv(ownedMortgages: 0 | 1 | 2, ownerOccupied: boolean): LtvRange {
+export function suggestedLtv(ownedMortgages: 0 | 1 | 2): LtvRange {
   if (ownedMortgages === 0) {
     return {
       low: 70,
@@ -291,9 +287,7 @@ export function suggestedLtv(ownedMortgages: 0 | 1 | 2, ownerOccupied: boolean):
     return {
       low: 50,
       high: 60,
-      note: ownerOccupied
-        ? "名下有 1 戶還在繳，這次算第 2 戶：央行上限 6 成，且不得有寬限期（115.3.20 起）。"
-        : "非自住會被抓得更緊。這次算第 2 戶，央行上限 6 成，且不得有寬限期。",
+      note: "名下有 1 戶還在繳，這次算第 2 戶：央行上限 6 成，且不得有寬限期（115.3.20 起）。",
       regCap: 60,
       graceBanned: true
     };
