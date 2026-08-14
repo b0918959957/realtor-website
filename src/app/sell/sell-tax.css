@@ -515,9 +515,18 @@
 .site-root .st-scenarios { overflow-x: auto; }
 .site-root .st-scenarios table {
   width: 100%;
-  min-width: 420px;
   border-collapse: collapse;
   font-size: 0.82rem;
+}
+/* 窄螢幕：拿掉「政府稅負」欄，優先保住「預估實拿」與「與目前差」不被切掉 */
+@media (max-width: 519px) {
+  .site-root .st-scenarios .st-col-tax { display: none; }
+  .site-root .st-scenarios table { font-size: 0.8rem; }
+  .site-root .st-scenarios th,
+  .site-root .st-scenarios td { padding: 10px 4px; }
+}
+@media (min-width: 520px) {
+  .site-root .st-scenarios table { min-width: 460px; }
 }
 .site-root .st-scenarios th {
   background: var(--gray-50);

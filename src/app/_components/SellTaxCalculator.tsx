@@ -1366,7 +1366,8 @@ export default function SellTaxCalculator({ lineUrl }: { lineUrl: string }) {
             <thead>
               <tr>
                 <th>成交價</th>
-                <th>政府稅負</th>
+                {/* 窄螢幕隱藏這欄，讓「預估實拿」與「與目前差」完整顯示 */}
+                <th className="st-col-tax">政府稅負</th>
                 <th>預估實拿</th>
                 <th>與目前差</th>
               </tr>
@@ -1375,7 +1376,7 @@ export default function SellTaxCalculator({ lineUrl }: { lineUrl: string }) {
               {scenarioRows.map((s) => (
                 <tr key={s.price} className={s.price === b.sellPrice ? "on" : ""}>
                   <td>{money(s.price)}</td>
-                  <td>{money(s.tax)}</td>
+                  <td className="st-col-tax">{money(s.tax)}</td>
                   <td><b>{money(s.net)}</b></td>
                   <td className={s.diff > 0 ? "up" : s.diff < 0 ? "down" : ""}>
                     {s.diff === 0 ? "—" : `${s.diff > 0 ? "+" : "−"}${money(Math.abs(s.diff))}`}
