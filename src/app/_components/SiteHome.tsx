@@ -233,7 +233,13 @@ const PLATFORMS: { name: string; url?: string; key: string; icon: React.ReactNod
 ];
 
 /** 受邀專訪影片（賣厝阿明 知識+ 頻道） */
-const INTERVIEWS = [
+/* kind 預設為影片；報導類請標 "article"，圖示才不會誤導成可以播放 */
+const INTERVIEWS: { title: string; url: string; kind?: "video" | "article" }[] = [
+  {
+    title: "屏東新聞報導",
+    url: "https://www.facebook.com/share/1LsJRNKnyz/",
+    kind: "article"
+  },
   {
     title: "屏東租屋注意事項",
     url: "https://www.youtube.com/watch?v=3SDgxNTx09c"
@@ -243,6 +249,15 @@ const INTERVIEWS = [
     url: "https://www.youtube.com/watch?v=a6K26AnXE3s"
   }
 ];
+
+/* 新聞報導用的圖示，跟影片的 ▶ 區隔 */
+const ArticleIcon = () => (
+  <svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden="true">
+    <path d="M4 5h13v14H4z" />
+    <path d="M17 9h3v8a2 2 0 0 1-3 1.7" />
+    <path d="M7 9h7M7 13h7M7 16h4" />
+  </svg>
+);
 
 const SERVICES = [
   {
@@ -651,7 +666,9 @@ export default function SiteHome() {
                 <div className="media-links">
                   {INTERVIEWS.map((item) => (
                     <a key={item.url} href={item.url} target="_blank" rel="noopener noreferrer">
-                      <span className="media-play" aria-hidden="true">▶</span>
+                      <span className="media-play" aria-hidden="true">
+                        {item.kind === "article" ? <ArticleIcon /> : "▶"}
+                      </span>
                       {item.title}
                     </a>
                   ))}
