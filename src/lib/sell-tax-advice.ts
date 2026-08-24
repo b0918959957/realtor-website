@@ -113,17 +113,41 @@ export function buildTips(input: Input, r: Result): Tip[] {
     });
   }
 
-  /* 5. 帳面賺 vs 實際拿回 */
+  /* 5. 實拿 vs 獲利 —— 三個數字要分清楚 */
   const bookGain = b.sellPrice - r.acquireCost;
   if (bookGain > 0 && b.netProceeds >= 0) {
     tips.push({
       tone: "info",
-      title: "帳面價差跟真正拿回的現金，是兩件事",
+      title: "實拿、帳面價差、真正獲利，是三個不同的數字",
       body:
-        `這間房帳面上比取得成本高約 ${wan(bookGain)}，但那不是你會拿到的錢。` +
-        `扣掉房貸、稅負與交易成本後，過戶當天實際匯進你帳戶的現金約 ${wan(b.netProceeds)} ——` +
-        `這筆錢裡面大部分是你原本就已經還進房子裡的本金，不是獲利。` +
-        `「帳面賺多少」跟「手上拿回多少」是兩個數字，資金規劃要看後面那個。`
+        `帳面上賣價比取得成本高 ${wan(bookGain)}，過戶當天實際入帳 ${wan(b.netProceeds)}，` +
+        `但真正賺到的是 ${wan(b.realProfit)}。` +
+        `差別在於實拿裡面有 ${wan(b.ownCapital)} 是你自己原本就投進去的錢（自備款加上這些年還掉的本金），` +
+        `那是拿回自己的錢，不是獲利。談價格看實拿，算報酬看獲利。`
+    });
+  }
+
+  /* 6. 自備款沒填 —— 提示可以拆得更細 */
+  if (b.downPayment <= 0 && b.ownCapital > 0) {
+    tips.push({
+      tone: "info",
+      title: "填上當初自備款，可以看得更清楚",
+      body:
+        `你自己已經投入約 ${wan(b.ownCapital)}（取得成本扣掉剩餘房貸）。` +
+        `如果把當初的自備款填上去，這一塊還能再拆成「自備款」與「這些年還掉的本金」。` +
+        `補充一點：自備款不會再從獲利裡扣一次，它本來就含在取得成本裡，扣兩次獲利會被低估。`
+    });
+  }
+
+  /* 7. 賣掉是虧的 */
+  if (b.realProfit < 0 && b.sellPrice > 0) {
+    tips.push({
+      tone: "warn",
+      title: "這個價格賣掉，實際上是虧的",
+      body:
+        `扣掉取得成本與全部稅費後，真正的損益是 ${wan(b.realProfit)}。` +
+        `就算過戶當天帳戶進了 ${wan(b.netProceeds)}，那筆錢裡面是你自己原本投入的本金，不是獲利。` +
+        `賣或不賣還要看你的資金需求與後續規劃，但先把這個數字看清楚再決定。`
     });
   }
 

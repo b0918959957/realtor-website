@@ -91,7 +91,7 @@ const INIT: Input = {
     standardRatePct: 0,
     marginalRate: 0.12
   },
-  financing: { remainingLoan: 0, prepayPenaltyKnown: "unknown", prepayPenalty: 0 },
+  financing: { remainingLoan: 0, prepayPenaltyKnown: "unknown", prepayPenalty: 0, downPayment: 0 },
   agent: { mode: "rate", rate: TAX_RULES.defaults.agentFeeRate * 100, amount: 0 },
   escrow: { status: "undecided", rate: TAX_RULES.defaults.escrowRate, overrideAmount: null },
   admin: { ...TAX_RULES.defaults.admin },
@@ -609,7 +609,7 @@ export default function SellTaxCalculator({ lineUrl }: { lineUrl: string }) {
               label="原始取得價格"
               hint={
                 input.basic.acquireType === "purchase"
-                  ? "當初的買價"
+                  ? "當初的買價（房子的總價，不是你付的頭期款）"
                   : "非買賣取得者，請填依規定認定的取得成本"
               }
             >
@@ -708,6 +708,33 @@ export default function SellTaxCalculator({ lineUrl }: { lineUrl: string }) {
                 房貸通常有綁約期，綁約期間內提前清償可能要付違約金。
                 建議打給銀行問「綁約到什麼時候、現在清償要付多少」，這筆目前沒有計入試算。
               </p>
+            ) : null}
+
+            <h4 className="st-sub">當初自備款（選填）</h4>
+            <p className="st-hint">
+              填了之後，結果頁會把「實拿」拆成<strong>拿回自己的錢</strong>和<strong>真正賺到的</strong>兩塊。
+              <br />
+              提醒：自備款<strong>不會</strong>再從獲利裡扣一次 —— 它本來就包含在「原始取得價格」裡面，
+              扣兩次會讓獲利被低估。不填也算得出獲利，只是看不到細部拆解。
+            </p>
+            <Row label="當初自備款" hint="頭期款＋當時自己拿出來的相關費用">
+              <MoneyInput
+                value={input.financing.downPayment}
+                onChange={(v) => patch("financing", { downPayment: v })}
+              />
+            </Row>
+
+            {input.deal.acquirePrice > 0 && input.financing.remainingLoan > 0 ? (
+              <div className="st-callout">
+                <p>
+                  你自己已經投入約{" "}
+                  <strong>{money(Math.max(0, result.acquireCost - input.financing.remainingLoan))}</strong>
+                </p>
+                <p className="st-callout-sub">
+                  等於「取得成本 － 剩餘房貸」，也就是自備款加上這些年還掉的房貸本金。
+                  賣掉之後這一塊會先回到你手上，它不是獲利。
+                </p>
+              </div>
             ) : null}
           </>
         );
@@ -1299,12 +1326,69 @@ export default function SellTaxCalculator({ lineUrl }: { lineUrl: string }) {
           房貸是把原本就欠銀行的錢還掉，不是被政府或仲介拿走 —— 分開看才不會誤會。
         </p>
 
-        {/* 損益分析 */}
-        <h4 className="st-sub">損益分析</h4>
+        {/* 獲利分析 */}
+        <h4 className="st-sub">那我到底賺多少？</h4>
         <div className="st-ledger compact">
-          <div className="st-ledger-row"><span>原始取得成本</span><strong>{money(result.acquireCost)}</strong></div>
-          <div className="st-ledger-row"><span>出售成交價</span><strong>{money(b.sellPrice)}</strong></div>
-          <div className="st-ledger-row"><span>帳面價差</span><strong>{money(b.sellPrice - result.acquireCost)}</strong></div>
+          <div className="st-ledger-row head"><span>出售成交價</span><strong>{money(b.sellPrice)}</strong></div>
+          <div className="st-ledger-row"><span>－ 原始取得成本</span><strong>{money(result.acquireCost)}</strong></div>
+          <div className="st-ledger-row">
+            <span>－ 稅負與交易成本</span>
+            <strong>{money(b.govTotal + b.serviceTotal + b.settlement + b.other + b.prepayPenalty)}</strong>
+          </div>
+          <div className="st-ledger-row total">
+            <span>＝ 真正獲利</span>
+            <strong>{money(b.realProfit)}</strong>
+          </div>
+        </div>
+
+        <div className={`st-profit${b.realProfit < 0 ? " danger" : ""}`}>
+          <p className="st-profit-label">真正獲利</p>
+          <p className="st-profit-value">約 {money(b.realProfit)}</p>
+          {b.returnOnOwnCapital !== null ? (
+            <p className="st-profit-roi">
+              自有資金報酬率約 {(b.returnOnOwnCapital * 100).toFixed(0)}%
+              （獲利 ÷ 你自己投入的 {money(b.ownCapital)}）
+            </p>
+          ) : null}
+        </div>
+
+        <h4 className="st-sub">實拿 {money(b.netProceeds)} 是怎麼組成的</h4>
+        <div className="st-split">
+          <div className="st-split-row own">
+            <span>拿回自己原本投入的錢</span>
+            <b>{money(b.ownCapital)}</b>
+          </div>
+          {b.downPayment > 0 ? (
+            <>
+              <div className="st-split-sub">
+                <span>・當初自備款</span>
+                <b>{money(b.downPayment)}</b>
+              </div>
+              <div className="st-split-sub">
+                <span>・這些年還掉的房貸本金</span>
+                <b>{money(b.principalRepaid)}</b>
+              </div>
+            </>
+          ) : (
+            <p className="st-split-hint">
+              想看這一塊拆成「自備款」與「已還本金」？回到「房貸還剩多少」把當初自備款填上。
+            </p>
+          )}
+          <div className="st-split-row profit">
+            <span>真正賺到的</span>
+            <b>{money(b.realProfit)}</b>
+          </div>
+        </div>
+        <p className="st-note">
+          自備款已經包含在「原始取得成本」裡面，所以計算獲利時<strong>不會</strong>再扣一次，
+          扣兩次會讓獲利被低估。它在這裡的作用是把實拿拆開，讓你看清楚哪些是拿回自己的錢。
+          <br />
+          另外，這些年繳的房貸利息、房屋稅、地價稅與修繕支出並未計入獲利，實際報酬會比這裡低一些。
+        </p>
+
+        <h4 className="st-sub">稅務上的所得（跟上面的獲利不一樣）</h4>
+        <div className="st-ledger compact">
+          <div className="st-ledger-row"><span>帳面價差（賣價 － 取得成本）</span><strong>{money(b.sellPrice - result.acquireCost)}</strong></div>
           {result.houseLand ? (
             <>
               <div className="st-ledger-row">
@@ -1324,9 +1408,11 @@ export default function SellTaxCalculator({ lineUrl }: { lineUrl: string }) {
             </div>
           ) : null}
           <div className="st-ledger-row"><span>預估稅負合計</span><strong>{money(b.govTotal)}</strong></div>
-          <div className="st-ledger-row total"><span>最後現金實拿</span><strong>{money(b.netProceeds)}</strong></div>
         </div>
-        <p className="st-note">帳面上賣價比買價高，不代表真正淨賺相同金額。</p>
+        <p className="st-note">
+          稅務上的「課稅所得」是按稅法規定算的，會減除土地漲價總數額等項目，
+          跟你實際口袋裡的獲利不是同一個數字，兩個都要看。
+        </p>
 
         {/* 稅制與稅率說明 */}
         <h4 className="st-sub">稅制判斷</h4>
@@ -1460,6 +1546,16 @@ export default function SellTaxCalculator({ lineUrl }: { lineUrl: string }) {
       `－ 交屋結算：${money(b.settlement)}`,
       `－ 其他費用：${money(b.other)}`,
       `＝ 預估最後實拿：約 ${money(b.netProceeds)}`,
+      "",
+      "【實拿拆解】",
+      `拿回自己原本投入的：${money(b.ownCapital)}`,
+      ...(b.downPayment > 0
+        ? [`　・當初自備款：${money(b.downPayment)}`, `　・已還房貸本金：${money(b.principalRepaid)}`]
+        : []),
+      `真正獲利：約 ${money(b.realProfit)}`,
+      ...(b.returnOnOwnCapital !== null
+        ? [`自有資金報酬率：約 ${(b.returnOnOwnCapital * 100).toFixed(0)}%（未計入房貸利息與持有期間稅費）`]
+        : []),
       "",
       `持有期間：${result.holdingLabel}`,
       `適用制度：${result.regime.reason}`

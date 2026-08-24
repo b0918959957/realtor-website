@@ -95,6 +95,14 @@ export type Financing = {
   remainingLoan: number;
   prepayPenaltyKnown: "none" | "yes" | "unknown";
   prepayPenalty: number;
+  /**
+   * 當初的自備款（選填）。
+   *
+   * ⚠️ 這個數字「不會」從獲利再扣一次 —— 自備款本來就包含在「原始取得價格」裡面，
+   *    再扣一次就是重複扣除，獲利會被低估。
+   *    它的用途只有一個：把「實拿」拆成「拿回自己的錢」與「真正賺到的」。
+   */
+  downPayment: number;
 };
 
 export type Escrow = { status: "yes" | "no" | "undecided"; rate: number; overrideAmount: number | null };
@@ -782,6 +790,21 @@ export type Breakdown = {
   /* 合計 */
   totalDeduction: number;
   netProceeds: number;
+
+  /* ── 獲利分析 ──────────────────────────────────────────────
+     實拿 ≠ 獲利。實拿裡面有一大塊是「拿回自己原本投入的錢」。
+     恆等式：實拿 = 自己已投入的資金 + 真正獲利                */
+
+  /** 真正獲利 = 成交價 − 取得成本 − 稅負與交易成本（不扣房貸，也不再扣自備款） */
+  realProfit: number;
+  /** 拿回自己原本投入的錢 = 取得成本 − 剩餘房貸 */
+  ownCapital: number;
+  /** 其中的自備款（使用者有填才有值） */
+  downPayment: number;
+  /** 其中這些年已償還的房貸本金 = ownCapital − downPayment */
+  principalRepaid: number;
+  /** 自有資金報酬率 = 真正獲利 ÷ 自己已投入的資金 */
+  returnOnOwnCapital: number | null;
 };
 
 export type Result = {
@@ -849,6 +872,24 @@ export function compute(input: Input, overridePrice?: number): Result {
   const totalDeduction = govTotal + serviceTotal + financeTotal + settlement + other;
   const netProceeds = sellPrice - totalDeduction;
 
+  /* ── 獲利分析 ──
+     真正獲利只扣「真的被拿走的錢」：稅、交易成本、結算、違約金。
+     剩餘房貸不扣 —— 那是還自己欠的債，不是損失。
+     自備款也不扣 —— 它已經包含在取得成本裡，再扣一次就是重複扣除。 */
+  const realCosts = govTotal + serviceTotal + settlement + other + prepayPenalty;
+  const realProfit = sellPrice - acquireCost - realCosts;
+  const ownCapital = Math.max(0, acquireCost - remainingLoan);
+  const downPayment = Math.max(0, num(input.financing.downPayment));
+  const principalRepaid = Math.max(0, ownCapital - downPayment);
+  const returnOnOwnCapital = ownCapital > 0 ? realProfit / ownCapital : null;
+
+  if (downPayment > acquireCost && acquireCost > 0) {
+    warnings.push(
+      "你填的自備款比原始取得成本還高，數字可能填反了。" +
+      "「原始取得價格」要填房子的總價，不是你當初付的頭期款。"
+    );
+  }
+
   if (input.basic.sellerKind === "company") {
     warnings.push(
       "法人交易涉及營利事業所得稅、營業稅等不同規定，本工具的自然人公式不適用，" +
@@ -891,7 +932,12 @@ export function compute(input: Input, overridePrice?: number): Result {
       settlement,
       other,
       totalDeduction,
-      netProceeds
+      netProceeds,
+      realProfit,
+      ownCapital,
+      downPayment,
+      principalRepaid,
+      returnOnOwnCapital
     },
     warnings,
     uncounted
