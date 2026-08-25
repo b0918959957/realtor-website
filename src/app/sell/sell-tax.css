@@ -282,6 +282,30 @@
   box-shadow: 0 0 0 3px rgba(0, 60, 125, 0.08);
 }
 
+/* 年 / 月 / 日 三個下拉 */
+.site-root .st-date {
+  display: grid;
+  grid-template-columns: 1.9fr 1fr 1fr;
+  gap: 6px;
+}
+.site-root .st-date select {
+  width: 100%;
+  min-width: 0;
+  padding: 11px 6px;
+  border: 1.5px solid var(--gray-100);
+  border-radius: 10px;
+  font-size: 0.92rem;
+  font-family: inherit;
+  background: #fff;
+  color: var(--ink);
+}
+.site-root .st-date select:focus {
+  outline: none;
+  border-color: var(--foresight-primary-navy);
+  box-shadow: 0 0 0 3px rgba(0, 60, 125, 0.08);
+}
+.site-root .st-date select:disabled { background: var(--gray-50); color: var(--gray-500); }
+
 .site-root .st-money { position: relative; display: block; }
 .site-root .st-money input { width: 100%; padding-right: 46px !important; text-align: right; }
 .site-root .st-unit {

@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { DISCLAIMERS, TAX_RULES } from "@/lib/sell-tax-rules";
 import {
   type AcquireType,
@@ -190,6 +190,114 @@ const OTHER_FIELDS: { key: keyof Input["other"]; label: string }[] = [
 ];
 
 /* ═══════════════════════════ 小元件 ═══════════════════════════ */
+
+/**
+ * 日期選擇：年 / 月 / 日 三個下拉。
+ *
+ * 不用 <input type="date"> 的原因：瀏覽器內建的選單把月份格插在年份清單中間，
+ * 要往回找 20、30 年前的取得日期得滑很久（實際使用者回饋）。
+ * 三個下拉各自獨立，年份由近到遠排列，並標註民國年，屋主找得比較快。
+ */
+const YEAR_MIN = 1950;
+
+function DateSelect({
+  value,
+  onChange,
+  ariaLabel
+}: {
+  value: string;
+  onChange: (v: string) => void;
+  ariaLabel: string;
+}) {
+  /**
+   * 年月日各自存在內部狀態。
+   *
+   * ⚠️ 不要直接從 value 推導出 y/m/d：使用者一定是先選年、再選月、再選日，
+   *    中間那兩步湊不出完整日期，如果那時就往外送空字串，
+   *    剛選好的年份會被清掉，變成怎麼選都跳回「年」。
+   *    只有三個都選齊才往外送。
+   */
+  const parts = value ? value.split("-").map(Number) : [];
+  const [y, setY] = useState(parts[0] || 0);
+  const [m, setM] = useState(parts[1] || 0);
+  const [d, setD] = useState(parts[2] || 0);
+  /** 記住自己送出去的值，用來分辨 value 是外部改的（例如清除重算）還是自己造成的 */
+  const lastEmitted = useRef<string | null>(null);
+
+  useEffect(() => {
+    if (value === lastEmitted.current) return;
+    const p = value ? value.split("-").map(Number) : [];
+    setY(p[0] || 0);
+    setM(p[1] || 0);
+    setD(p[2] || 0);
+  }, [value]);
+
+  const years = useMemo(() => {
+    const max = new Date().getFullYear() + 5;
+    const out: number[] = [];
+    for (let i = max; i >= YEAR_MIN; i--) out.push(i);
+    return out;
+  }, []);
+
+  const daysInMonth = (yy: number, mm: number) => (yy && mm ? new Date(yy, mm, 0).getDate() : 31);
+
+  const emit = (ny: number, nm: number, nd: number) => {
+    // 換月之後原本選的日可能不存在（例如 3/31 換成 2 月），自動收到該月最後一天
+    const day = ny && nm && nd ? Math.min(nd, daysInMonth(ny, nm)) : nd;
+    setY(ny);
+    setM(nm);
+    setD(day);
+
+    const out =
+      ny && nm && day
+        ? `${ny}-${String(nm).padStart(2, "0")}-${String(day).padStart(2, "0")}`
+        : "";
+    lastEmitted.current = out;
+    onChange(out);
+  };
+
+  return (
+    <div className="st-date">
+      <select
+        aria-label={`${ariaLabel} 年`}
+        value={y || ""}
+        onChange={(e) => emit(Number(e.target.value), m, d)}
+      >
+        <option value="">年</option>
+        {years.map((yy) => (
+          <option key={yy} value={yy}>
+            {yy}（民 {yy - 1911}）
+          </option>
+        ))}
+      </select>
+      <select
+        aria-label={`${ariaLabel} 月`}
+        value={m || ""}
+        onChange={(e) => emit(y, Number(e.target.value), d)}
+      >
+        <option value="">月</option>
+        {Array.from({ length: 12 }, (_, i) => i + 1).map((mm) => (
+          <option key={mm} value={mm}>
+            {mm} 月
+          </option>
+        ))}
+      </select>
+      <select
+        aria-label={`${ariaLabel} 日`}
+        value={d || ""}
+        onChange={(e) => emit(y, m, Number(e.target.value))}
+        disabled={!y || !m}
+      >
+        <option value="">日</option>
+        {Array.from({ length: daysInMonth(y, m) }, (_, i) => i + 1).map((dd) => (
+          <option key={dd} value={dd}>
+            {dd} 日
+          </option>
+        ))}
+      </select>
+    </div>
+  );
+}
 
 function MoneyInput({
   value,
@@ -580,18 +688,18 @@ export default function SellTaxCalculator({ lineUrl }: { lineUrl: string }) {
             ) : null}
 
             <Row label="取得日期" hint="登記日／繼承或受贈日">
-              <input
-                type="date"
+              <DateSelect
+                ariaLabel="取得日期"
                 value={input.deal.acquireDate}
-                onChange={(e) => patch("deal", { acquireDate: e.target.value })}
+                onChange={(v) => patch("deal", { acquireDate: v })}
               />
             </Row>
 
             <Row label="預計出售日期" hint="以所有權移轉登記日為準">
-              <input
-                type="date"
+              <DateSelect
+                ariaLabel="預計出售日期"
                 value={input.deal.sellDate}
-                onChange={(e) => patch("deal", { sellDate: e.target.value })}
+                onChange={(v) => patch("deal", { sellDate: v })}
               />
             </Row>
 
@@ -605,10 +713,10 @@ export default function SellTaxCalculator({ lineUrl }: { lineUrl: string }) {
                 />
                 {input.deal.countPriorHolding ? (
                   <Row label="前手的取得日期">
-                    <input
-                      type="date"
+                    <DateSelect
+                      ariaLabel="前手的取得日期"
                       value={input.deal.priorOwnerAcquireDate}
-                      onChange={(e) => patch("deal", { priorOwnerAcquireDate: e.target.value })}
+                      onChange={(v) => patch("deal", { priorOwnerAcquireDate: v })}
                     />
                   </Row>
                 ) : null}
