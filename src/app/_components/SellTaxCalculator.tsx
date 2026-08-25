@@ -114,6 +114,36 @@ const INIT: Input = {
   settlementEnabled: false
 };
 
+/**
+ * 把瀏覽器裡的舊存檔併回目前的預設值。
+ *
+ * ⚠️ 不能只用 { ...INIT, ...存檔 }。那是淺層合併，存檔裡的 financing、land 等
+ *    子物件會「整組」蓋掉新版的預設值。之前用過舊版的人，存檔裡沒有後來才加的
+ *    欄位（例如自備款 downPayment），讀回來會是 undefined，
+ *    金額輸入框就會顯示 NaN。這裡逐一 key 再合併一層，補上缺少的新欄位。
+ */
+function mergeSaved(saved: unknown): Input {
+  if (!saved || typeof saved !== "object") return INIT;
+  const stored = saved as Record<string, unknown>;
+  const out: Record<string, unknown> = { ...INIT };
+
+  for (const key of Object.keys(INIT) as (keyof Input)[]) {
+    const base = INIT[key];
+    const value = stored[key];
+    if (value === undefined || value === null) continue;
+
+    const bothPlainObjects =
+      typeof base === "object" && base !== null && !Array.isArray(base) &&
+      typeof value === "object" && !Array.isArray(value);
+
+    out[key] = bothPlainObjects
+      ? { ...(base as Record<string, unknown>), ...(value as Record<string, unknown>) }
+      : value;
+  }
+
+  return out as Input;
+}
+
 const CITIES = [
   "高雄市", "屏東縣", "臺南市", "臺中市", "臺北市", "新北市", "桃園市",
   "基隆市", "新竹市", "新竹縣", "苗栗縣", "彰化縣", "南投縣", "雲林縣",
@@ -313,12 +343,17 @@ function MoneyInput({
   ariaLabel?: string;
 }) {
   const factor = unit === "wan" ? 10_000 : 1;
-  const display = value === 0 ? "" : String(value / factor);
-  const [buf, setBuf] = useState(display);
+  // 舊存檔可能沒有後來才新增的欄位，值會是 undefined，直接運算會變成 NaN
+  const toText = (v: number) => {
+    const n = Number(v);
+    return Number.isFinite(n) && n !== 0 ? String(n / factor) : "";
+  };
+  const [buf, setBuf] = useState(() => toText(value));
   const [focused, setFocused] = useState(false);
 
   useEffect(() => {
-    if (!focused) setBuf(value === 0 ? "" : String(value / factor));
+    if (!focused) setBuf(toText(value));
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [value, focused, factor]);
 
   return (
@@ -514,7 +549,7 @@ export default function SellTaxCalculator({ lineUrl }: { lineUrl: string }) {
   useEffect(() => {
     try {
       const raw = window.localStorage.getItem(STORAGE_KEY);
-      if (raw) setInput({ ...INIT, ...(JSON.parse(raw) as Input) });
+      if (raw) setInput(mergeSaved(JSON.parse(raw)));
     } catch {
       /* 忽略毀損的本機資料 */
     }
