@@ -235,6 +235,33 @@ function MoneyInput({
   );
 }
 
+/** 把 **粗體** 標記轉成 <strong>，讓警語文字可以強調重點 */
+function richText(text: string) {
+  return text.split(/(\*\*[^*]+\*\*)/g).map((part, i) =>
+    part.startsWith("**") && part.endsWith("**") ? (
+      <strong key={i}>{part.slice(2, -2)}</strong>
+    ) : (
+      <span key={i}>{part}</span>
+    )
+  );
+}
+
+/** 為什麼跟國稅局算的不一樣 —— 屋主拿數字來質疑時就是看這一段 */
+function GapNotice() {
+  return (
+    <section className="st-gap">
+      <h4 className="st-gap-title">{DISCLAIMERS.gapTitle}</h4>
+      <p className="st-gap-intro">{DISCLAIMERS.gapIntro}</p>
+      <ul className="st-gap-list">
+        {DISCLAIMERS.gapReasons.map((r, i) => (
+          <li key={i}>{richText(r)}</li>
+        ))}
+      </ul>
+      <p className="st-gap-advice">{DISCLAIMERS.gapAdvice}</p>
+    </section>
+  );
+}
+
 /** 區塊警語：全站統一樣式，文字一律來自 DISCLAIMERS */
 function Caveat({ text }: { text: string }) {
   return (
@@ -1329,6 +1356,8 @@ export default function SellTaxCalculator({ lineUrl }: { lineUrl: string }) {
 
         <p className="st-alert warn">{DISCLAIMERS.filing}</p>
 
+        <GapNotice />
+
         {/* 分類 */}
         <h4 className="st-sub">這些錢分別是誰收走的</h4>
         <div className="st-groups">
@@ -1366,7 +1395,6 @@ export default function SellTaxCalculator({ lineUrl }: { lineUrl: string }) {
           房貸是把原本就欠銀行的錢還掉，不是被政府或仲介拿走 —— 分開看才不會誤會。
         </p>
         <Caveat text={DISCLAIMERS.govTax} />
-        <Caveat text={DISCLAIMERS.service} />
 
         {/* 獲利分析 */}
         <h4 className="st-sub">那我到底賺多少？</h4>

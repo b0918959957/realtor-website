@@ -641,9 +641,16 @@ function highValueThreshold(city: string) {
   return T[T.length - 1];
 }
 
+/** 舊制稅額是「因為這筆交易而增加的綜所稅」的粗估，語氣要一致 */
+const MARGINAL_NOTE =
+  "這裡算出來的不是最終稅額，而是「因為這筆交易大約會多繳的綜合所得稅」，" +
+  "以你選的邊際稅率乘出來。實際金額取決於你出售年度的全部所得、扣除額與適用級距，" +
+  "如果這筆所得把你推到更高的級距，實際會比這裡多。";
+
 export function calcLegacyTax(input: Input, sellPrice: number): LegacyTaxResult {
   const L = TAX_RULES.legacyPropertyIncome;
   const g = input.legacy;
+  const e = input.sellExpense;
   const notes: string[] = [
     "本案可能適用舊制房屋財產交易所得：土地部分不課所得稅（已課土地增值稅），" +
     "房屋部分之財產交易所得應併入出售年度綜合所得稅申報。"
@@ -677,19 +684,40 @@ export function calcLegacyTax(input: Input, sellPrice: number): LegacyTaxResult 
 
   if (g.path === "actual") {
     const acquireCost = totalAcquireCost(input.deal, input.cost) * ratio;
-    const expense = calcSellExpense(sellPrice, input.sellExpense).deductible * ratio;
+
+    /**
+     * ⚠️ 舊制的必要費用只能「核實認定」。
+     *
+     * 成交價 3%、上限 30 萬元那個核定標準是所得稅法第 14 條之 4 的規定，
+     * 只適用房地合一新制，舊制沒有這一條。
+     * 這裡若誤用 calcSellExpense()，沒有單據的人也會被多扣一筆費用，
+     * 所得會被低估、稅額算得比國稅局低很多。
+     */
+    const provenExpense = e.hasProof
+      ? num(e.sellAgentFee) + num(e.advertising) + num(e.cleaning) + num(e.moving) + num(e.otherExpense)
+      : 0;
+    const expense = provenExpense * ratio;
     const income = Math.max(0, houseRevenue - acquireCost - expense);
+
+    const extraNotes = [
+      "已依你輸入的成本與費用核實計算房屋部分所得。",
+      "成本與費用是按房屋評定現值的比例分攤。若你的買賣契約有分別載明房屋與土地價款，" +
+      "國稅局會以契約金額為準，結果可能與此處不同。"
+    ];
+    if (!e.hasProof) {
+      extraNotes.push(
+        "你勾選了沒有合法支付證明，因此本次未減除任何出售費用 ——" +
+        "舊制沒有新制那種「按成交價 3%、上限 30 萬元」的核定標準，必要費用一律要核實認定。"
+      );
+    }
+
     return {
       status: "ok",
       houseRevenue,
       income,
-      method: "核實計算（以房屋評定現值占公告土地現值＋房屋評定現值之比例分攤成交價、成本與費用）",
+      method: "核實計算（房屋收入 － 房屋部分成本 － 有證明的必要費用）",
       tax: income * num(g.marginalRate),
-      notes: [
-        ...notes,
-        "已依你輸入的成本與費用核實計算房屋部分所得，成本／費用皆按房屋比例分攤。",
-        "最終稅額取決於你出售年度的全部綜合所得，此處係以你選擇的邊際稅率粗估。"
-      ]
+      notes: [...notes, ...extraNotes, MARGINAL_NOTE]
     };
   }
 
@@ -699,13 +727,16 @@ export function calcLegacyTax(input: Input, sellPrice: number): LegacyTaxResult 
       status: "ok",
       houseRevenue,
       income,
-      method: `高總價案件：房屋收入 × ${(L.highValueRate * 100).toFixed(0)}%（${L.year}標準）`,
+      method: `推計：房屋收入 × ${(L.highValueRate * 100).toFixed(0)}%（高總價案件，${L.year}標準）`,
       tax: income * num(g.marginalRate),
       notes: [
         ...notes,
         `依 ${L.year} 財政部公告，${input.basic.city || "該地區"}房地總成交金額達 ${toWan(th.total)} 萬元` +
-        `或每坪單價達 ${toWan(th.perPing)} 萬元者，屬高總價案件，按房屋收入 20% 計算所得額。`,
-        "最終稅額取決於你出售年度的全部綜合所得，此處係以你選擇的邊際稅率粗估。"
+        `或每坪單價達 ${toWan(th.perPing)} 萬元者屬高總價案件，在無法提示成本費用證明時，` +
+        `按房屋收入 20% 推計所得額。`,
+        "如果你其實留有完整的成本與費用證明，應改用「有實際成本證明」路徑核實計算，" +
+        "結果通常會跟這裡差很多。",
+        MARGINAL_NOTE
       ]
     };
   }
@@ -737,7 +768,7 @@ export function calcLegacyTax(input: Input, sellPrice: number): LegacyTaxResult 
     notes: [
       ...notes,
       "此處採用你輸入的公告比率計算，請確認比率與該房屋所在行政區之公告一致。",
-      "最終稅額取決於你出售年度的全部綜合所得，此處係以你選擇的邊際稅率粗估。"
+      MARGINAL_NOTE
     ]
   };
 }
@@ -848,7 +879,7 @@ export function compute(input: Input, overridePrice?: number): Result {
   } else if (regime.regime === "legacy") {
     legacy = calcLegacyTax(input, sellPrice);
     incomeTax = legacy.tax;
-    incomeTaxLabel = "舊制財產交易所得稅（併入綜所稅）";
+    incomeTaxLabel = "舊制房屋所得稅（估‧併入綜所稅）";
     if (legacy.status === "insufficient") uncounted.push("舊制房屋財產交易所得稅");
   } else {
     uncounted.push("所得稅（尚未輸入取得／出售日期）");

@@ -388,6 +388,54 @@
 }
 .site-root .st-caveat span { flex: 0 0 auto; font-weight: 700; }
 
+/* 為什麼跟國稅局算的不一樣 */
+.site-root .st-gap {
+  margin: 18px 0;
+  padding: 16px 18px;
+  border: 1.5px solid rgba(0, 60, 125, 0.25);
+  border-radius: 12px;
+  background: rgba(0, 60, 125, 0.04);
+}
+.site-root .st-gap-title {
+  font-size: 0.94rem;
+  font-weight: 800;
+  color: var(--foresight-primary-navy);
+  margin-bottom: 8px;
+  line-height: 1.6;
+}
+.site-root .st-gap-intro,
+.site-root .st-gap-advice {
+  font-size: 0.8rem;
+  line-height: 1.9;
+  color: var(--gray-700);
+}
+.site-root .st-gap-list {
+  margin: 10px 0;
+  display: grid;
+  gap: 8px;
+}
+.site-root .st-gap-list li {
+  position: relative;
+  padding-left: 18px;
+  font-size: 0.8rem;
+  line-height: 1.85;
+  color: var(--gray-700);
+}
+.site-root .st-gap-list li::before {
+  content: "・";
+  position: absolute;
+  left: 0;
+  color: var(--foresight-secondary-orange);
+  font-weight: 900;
+}
+.site-root .st-gap-list strong { color: var(--foresight-primary-navy); font-weight: 800; }
+.site-root .st-gap-advice {
+  margin-top: 10px;
+  padding-top: 10px;
+  border-top: 1px dashed rgba(0, 60, 125, 0.2);
+  font-weight: 600;
+}
+
 /* 結果頁最上方的總聲明 */
 .site-root .st-topnotice {
   margin-bottom: 18px;
