@@ -5,7 +5,7 @@ import SellGate from "@/app/_components/SellGate";
 import SellTaxCalculator from "@/app/_components/SellTaxCalculator";
 import { PROFILE } from "@/lib/profile";
 import { GATE_COOKIE, verifyToken } from "@/lib/sell-gate";
-import { TAX_RULES } from "@/lib/sell-tax-rules";
+import { DISCLAIMERS, TAX_RULES } from "@/lib/sell-tax-rules";
 import "../site.css";
 import "./sell-tax.css";
 
@@ -116,11 +116,40 @@ export default async function SellPage() {
                 </li>
               ))}
             </ul>
-            <p className="st-disclaimer">
-              本工具依使用者輸入資料及現行法規進行初步試算，僅供賣房財務規劃參考，
-              不代表稅捐機關正式核定結果。實際稅額仍可能因取得方式、成本證明、土地資料、
-              自住資格及個案認定而不同。
-            </p>
+            <div className="st-disclaimer">
+              <p className="st-disclaimer-title">免責聲明</p>
+              <ol>
+                <li>
+                  本工具依使用者輸入資料及現行法規進行<strong>初步試算</strong>，僅供賣房財務規劃參考，
+                  不代表稅捐機關正式核定結果。實際稅額仍可能因取得方式、成本證明、土地資料、
+                  自住資格及個案認定而不同。
+                </li>
+                <li>
+                  房地合一所得稅由<strong>國稅局</strong>核定，土地增值稅由<strong>地方稅務局</strong>核定。
+                  各項成本與費用能否認列、認列多少，均由稅捐機關依你所提示的證明文件認定。
+                </li>
+                <li>
+                  仲介服務費、履約保證費、代書及行政費<strong>均非法定統一費率</strong>，
+                  本工具的預設值僅為試算參考，實際金額依委託契約、買賣契約及各承辦單位報價為準。
+                </li>
+                <li>
+                  {DISCLAIMERS.filing}
+                </li>
+                <li>
+                  本工具所產生之任何數字、提醒與說明，均屬一般性資訊，
+                  <strong>不構成稅務、法律、會計或投資建議</strong>，
+                  亦不得作為報稅、貸款、訴訟或任何正式用途之依據。
+                  個案情形請洽國稅局、地方稅務局、地政士或會計師確認。
+                </li>
+                <li>
+                  {DISCLAIMERS.company}
+                </li>
+                <li>
+                  你在本工具輸入的資料僅儲存於你自己的裝置，不會傳送至伺服器，
+                  劉羽菲及本網站均無法讀取。
+                </li>
+              </ol>
+            </div>
           </div>
         </section>
       </main>

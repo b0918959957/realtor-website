@@ -1,7 +1,7 @@
 "use client";
 
 import { useCallback, useEffect, useMemo, useState } from "react";
-import { TAX_RULES } from "@/lib/sell-tax-rules";
+import { DISCLAIMERS, TAX_RULES } from "@/lib/sell-tax-rules";
 import {
   type AcquireType,
   type Input,
@@ -232,6 +232,16 @@ function MoneyInput({
       />
       <span className="st-unit">{unit === "wan" ? "萬" : "元"}</span>
     </span>
+  );
+}
+
+/** 區塊警語：全站統一樣式，文字一律來自 DISCLAIMERS */
+function Caveat({ text }: { text: string }) {
+  return (
+    <p className="st-caveat">
+      <span aria-hidden="true">※</span>
+      {text}
+    </p>
   );
 }
 
@@ -516,6 +526,8 @@ export default function SellTaxCalculator({ lineUrl }: { lineUrl: string }) {
                 ))}
               </select>
             </Row>
+
+            <Caveat text={DISCLAIMERS.general} />
           </>
         );
 
@@ -598,6 +610,8 @@ export default function SellTaxCalculator({ lineUrl }: { lineUrl: string }) {
               label="符合法定特殊情形，適用 20% 優惠稅率"
               hint={TAX_RULES.houseLandRates.special.cases.join("；")}
             />
+
+            <Caveat text={DISCLAIMERS.houseLandTax} />
           </>
         );
 
@@ -637,6 +651,8 @@ export default function SellTaxCalculator({ lineUrl }: { lineUrl: string }) {
                 </p>
               </div>
             ) : null}
+
+            <Caveat text={DISCLAIMERS.price} />
           </>
         );
 
@@ -667,6 +683,8 @@ export default function SellTaxCalculator({ lineUrl }: { lineUrl: string }) {
               </p>
               <p className="st-callout-sub">已含原始取得價格。</p>
             </div>
+
+            <Caveat text={DISCLAIMERS.cost} />
           </>
         );
 
@@ -736,6 +754,8 @@ export default function SellTaxCalculator({ lineUrl }: { lineUrl: string }) {
                 </p>
               </div>
             ) : null}
+
+            <Caveat text={DISCLAIMERS.financing} />
           </>
         );
 
@@ -769,6 +789,8 @@ export default function SellTaxCalculator({ lineUrl }: { lineUrl: string }) {
                 目前尚有 {result.selfUse.missing.length} 項條件未勾選，本次試算不套用自住優惠。
               </p>
             )}
+
+            <Caveat text={DISCLAIMERS.selfUse} />
           </>
         );
 
@@ -836,6 +858,8 @@ export default function SellTaxCalculator({ lineUrl }: { lineUrl: string }) {
                 （兩者擇一，不會重複扣除）
               </p>
             </div>
+
+            <Caveat text={DISCLAIMERS.expense} />
           </>
         );
 
@@ -919,6 +943,8 @@ export default function SellTaxCalculator({ lineUrl }: { lineUrl: string }) {
                 交易服務成本合計約 <strong>{money(result.breakdown.serviceTotal)}</strong>
               </p>
             </div>
+
+            <Caveat text={DISCLAIMERS.service} />
           </>
         );
 
@@ -1033,6 +1059,7 @@ export default function SellTaxCalculator({ lineUrl }: { lineUrl: string }) {
                       你可能符合自用住宅用地 10% 優惠，但一生一次／一生一屋的認定條件很細，
                       建議出售前先向地方稅務局或代書確認。
                     </p>
+                    <Caveat text={DISCLAIMERS.selfUseLand} />
                   </div>
                 ) : null}
 
@@ -1070,6 +1097,8 @@ export default function SellTaxCalculator({ lineUrl }: { lineUrl: string }) {
               提醒：土地增值稅與房地合一課稅所得裡的「土地漲價總數額」是兩個不同概念，
               本工具已分開處理，不會重複扣除。
             </p>
+
+            <Caveat text={DISCLAIMERS.landTax} />
           </>
         );
 
@@ -1134,6 +1163,8 @@ export default function SellTaxCalculator({ lineUrl }: { lineUrl: string }) {
                 ) : null}
               </div>
             ))}
+
+            <Caveat text={DISCLAIMERS.settlement} />
 
             <h4 className="st-sub">其他稅務資料</h4>
             <Row label="可扣除之以前年度房地交易損失" hint="限依法得扣除者">
@@ -1213,6 +1244,7 @@ export default function SellTaxCalculator({ lineUrl }: { lineUrl: string }) {
                   </select>
                 </Row>
                 <p className="st-note">{TAX_RULES.legacyPropertyIncome.note}</p>
+                <Caveat text={DISCLAIMERS.legacy} />
               </>
             ) : null}
           </>
@@ -1256,6 +1288,11 @@ export default function SellTaxCalculator({ lineUrl }: { lineUrl: string }) {
 
     return (
       <div className="st-result">
+        <div className="st-topnotice">
+          <p className="st-topnotice-title">試算結果 · 僅供參考</p>
+          <p>{DISCLAIMERS.resultTop}</p>
+        </div>
+
         <p className="st-result-lead">如果這間房成交 {money(b.sellPrice)}</p>
 
         <div className="st-ledger">
@@ -1283,11 +1320,14 @@ export default function SellTaxCalculator({ lineUrl }: { lineUrl: string }) {
               以下項目因資料不足尚未計入：{result.uncounted.join("、")}。實際金額會低於此數字。
             </p>
           ) : null}
+          <p className="st-net-note">{DISCLAIMERS.netProceeds}</p>
         </div>
 
         {result.warnings.map((w, i) => (
           <p key={i} className="st-alert warn">{w}</p>
         ))}
+
+        <p className="st-alert warn">{DISCLAIMERS.filing}</p>
 
         {/* 分類 */}
         <h4 className="st-sub">這些錢分別是誰收走的</h4>
@@ -1325,6 +1365,8 @@ export default function SellTaxCalculator({ lineUrl }: { lineUrl: string }) {
         <p className="st-note">
           房貸是把原本就欠銀行的錢還掉，不是被政府或仲介拿走 —— 分開看才不會誤會。
         </p>
+        <Caveat text={DISCLAIMERS.govTax} />
+        <Caveat text={DISCLAIMERS.service} />
 
         {/* 獲利分析 */}
         <h4 className="st-sub">那我到底賺多少？</h4>
@@ -1385,6 +1427,7 @@ export default function SellTaxCalculator({ lineUrl }: { lineUrl: string }) {
           <br />
           另外，這些年繳的房貸利息、房屋稅、地價稅與修繕支出並未計入獲利，實際報酬會比這裡低一些。
         </p>
+        <Caveat text={DISCLAIMERS.profit} />
 
         <h4 className="st-sub">稅務上的所得（跟上面的獲利不一樣）</h4>
         <div className="st-ledger compact">
@@ -1413,6 +1456,7 @@ export default function SellTaxCalculator({ lineUrl }: { lineUrl: string }) {
           稅務上的「課稅所得」是按稅法規定算的，會減除土地漲價總數額等項目，
           跟你實際口袋裡的獲利不是同一個數字，兩個都要看。
         </p>
+        <Caveat text={result.regime.regime === "legacy" ? DISCLAIMERS.legacy : DISCLAIMERS.houseLandTax} />
 
         {/* 稅制與稅率說明 */}
         <h4 className="st-sub">稅制判斷</h4>
@@ -1444,6 +1488,7 @@ export default function SellTaxCalculator({ lineUrl }: { lineUrl: string }) {
           ) : null}
           <p className="st-callout-sub">{result.land.note}</p>
         </div>
+        <Caveat text={DISCLAIMERS.landTax} />
 
         {/* 情境模擬 */}
         <h4 className="st-sub">如果賣不同價格，我實拿多少</h4>
@@ -1475,6 +1520,7 @@ export default function SellTaxCalculator({ lineUrl }: { lineUrl: string }) {
             每個價格都是整組重新計算 —— 房地合一所得、仲介費、履保費會跟著變，
             但土地增值稅看的是土地公告現值，不會因為成交價高低而改變。
           </p>
+          <Caveat text={DISCLAIMERS.scenario} />
           <div className="st-scenario-edit">
             <span>自訂比較價格（萬元，用逗號分隔）：</span>
             <input
@@ -1496,6 +1542,7 @@ export default function SellTaxCalculator({ lineUrl }: { lineUrl: string }) {
         {tips.length > 0 ? (
           <>
             <h4 className="st-sub">小飛提醒</h4>
+            <Caveat text={DISCLAIMERS.tips} />
             <div className="st-tips">
               {tips.map((t, i) => (
                 <div key={i} className={`st-tip ${t.tone}`}>
@@ -1515,6 +1562,18 @@ export default function SellTaxCalculator({ lineUrl }: { lineUrl: string }) {
           <a className="btn btn-line" href={lineUrl} target="_blank" rel="noopener noreferrer">
             加 LINE 問小飛
           </a>
+        </div>
+
+        {/* 列印／存 PDF 時一定要帶著的免責聲明 */}
+        <div className="st-printnotice">
+          <p className="st-printnotice-title">免責聲明</p>
+          <p>{DISCLAIMERS.resultTop}</p>
+          <p>{DISCLAIMERS.print}</p>
+          <p>{DISCLAIMERS.filing}</p>
+          <p className="st-printnotice-meta">
+            法規版本 {TAX_RULES.version}｜最後更新 {TAX_RULES.lastUpdated}｜
+            試算時間 {new Date().toLocaleString("zh-TW")}
+          </p>
         </div>
 
         <div className="st-actions no-print">
@@ -1561,7 +1620,15 @@ export default function SellTaxCalculator({ lineUrl }: { lineUrl: string }) {
       `適用制度：${result.regime.reason}`
     ];
     if (result.uncounted.length) lines.push(`尚未計入：${result.uncounted.join("、")}`);
-    lines.push("", "本試算僅供參考，不代表稅捐機關正式核定結果。");
+    lines.push(
+      "",
+      "──────────",
+      "【免責聲明】",
+      DISCLAIMERS.resultTop,
+      DISCLAIMERS.print,
+      DISCLAIMERS.filing,
+      `法規版本 ${TAX_RULES.version}｜最後更新 ${TAX_RULES.lastUpdated}`
+    );
 
     navigator.clipboard
       .writeText(lines.join("\n"))

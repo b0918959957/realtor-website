@@ -373,6 +373,77 @@
   border-left-color: var(--line-green);
   color: #05803a;
 }
+/* 區塊警語：小字、低調，但看得到 */
+.site-root .st-caveat {
+  display: flex;
+  gap: 6px;
+  margin: 10px 0 4px;
+  padding: 9px 11px;
+  background: var(--gray-50);
+  border-radius: 8px;
+  border-left: 3px solid var(--gray-500);
+  font-size: 0.72rem;
+  line-height: 1.8;
+  color: var(--gray-500);
+}
+.site-root .st-caveat span { flex: 0 0 auto; font-weight: 700; }
+
+/* 結果頁最上方的總聲明 */
+.site-root .st-topnotice {
+  margin-bottom: 18px;
+  padding: 13px 15px;
+  background: rgba(242, 138, 0, 0.08);
+  border: 1.5px solid rgba(242, 138, 0, 0.35);
+  border-radius: 10px;
+}
+.site-root .st-topnotice-title {
+  font-size: 0.78rem;
+  font-weight: 800;
+  color: #8a5000;
+  letter-spacing: 0.06em;
+  margin-bottom: 5px;
+}
+.site-root .st-topnotice p:last-child {
+  font-size: 0.76rem;
+  line-height: 1.85;
+  color: #8a5000;
+}
+
+/* 實拿數字下方的小字 */
+.site-root .st-net-note {
+  margin-top: 10px;
+  font-size: 0.7rem;
+  line-height: 1.75;
+  opacity: 0.82;
+}
+
+/* 列印用免責聲明：畫面上收起來，列印時展開 */
+.site-root .st-printnotice {
+  margin-top: 20px;
+  padding: 14px 16px;
+  border: 1px dashed var(--gray-500);
+  border-radius: 10px;
+  background: var(--gray-50);
+}
+.site-root .st-printnotice-title {
+  font-size: 0.78rem;
+  font-weight: 800;
+  color: var(--gray-700);
+  margin-bottom: 6px;
+}
+.site-root .st-printnotice p {
+  font-size: 0.7rem;
+  line-height: 1.85;
+  color: var(--gray-500);
+  margin-bottom: 5px;
+}
+.site-root .st-printnotice-meta {
+  margin-top: 8px;
+  padding-top: 8px;
+  border-top: 1px solid var(--gray-100);
+  font-size: 0.68rem !important;
+}
+
 .site-root .st-callout {
   margin: 14px 0;
   padding: 14px 16px;
@@ -730,13 +801,31 @@
 }
 .site-root .st-disclaimer {
   margin-top: 18px;
-  padding: 14px 16px;
+  padding: 16px 18px;
   background: var(--gray-50);
+  border: 1px solid var(--gray-100);
   border-radius: 10px;
-  font-size: 0.75rem;
   color: var(--gray-500);
+}
+.site-root .st-disclaimer-title {
+  font-size: 0.82rem;
+  font-weight: 800;
+  color: var(--gray-700);
+  margin-bottom: 10px;
+  padding-bottom: 8px;
+  border-bottom: 1px solid var(--gray-100);
+}
+.site-root .st-disclaimer ol {
+  list-style: decimal;
+  padding-left: 18px;
+  display: grid;
+  gap: 8px;
+}
+.site-root .st-disclaimer li {
+  font-size: 0.75rem;
   line-height: 1.9;
 }
+.site-root .st-disclaimer strong { color: var(--gray-700); }
 
 /* ───────────────────────── 桌機 ───────────────────────── */
 @media (min-width: 768px) {
@@ -787,4 +876,22 @@
   .site-root .st-ledger-row.total strong { color: var(--ink) !important; }
   .site-root .st-groups { grid-template-columns: repeat(2, 1fr); }
   .site-root .st-tip { break-inside: avoid; }
+
+  /* 列印時警語一定要看得清楚，不能是淡灰小字 */
+  .site-root .st-caveat,
+  .site-root .st-printnotice p,
+  .site-root .st-disclaimer li { color: #333 !important; font-size: 10px; }
+  .site-root .st-topnotice {
+    border: 1.5px solid #333 !important;
+    background: none !important;
+    break-inside: avoid;
+  }
+  .site-root .st-topnotice-title,
+  .site-root .st-topnotice p { color: #333 !important; }
+  .site-root .st-printnotice {
+    break-inside: avoid;
+    border: 1px solid #333 !important;
+    background: none !important;
+  }
+  .site-root .st-legal { display: block !important; }
 }
