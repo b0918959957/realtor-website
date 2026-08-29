@@ -56,8 +56,8 @@ function TrophyIcon() {
 }
 
 const STATS = [
-  { count: 34, suffix: "萬+", label: "單支影片最高觀看次數" },
-  { count: 132, suffix: "萬+", label: "精選 10 支影片累積觀看" },
+  { count: 40, suffix: "萬+", label: "單支影片最高觀看次數" },
+  { count: 145, suffix: "萬+", label: "精選 10 支影片累積觀看" },
   { count: 5, suffix: "大", label: "社群平台同步曝光" },
   { count: 10, suffix: "項", label: "一站式服務內容" }
 ];
@@ -113,14 +113,14 @@ const FEATURES = [
  */
 const VIDEOS: { name: string; views?: string; url?: string }[] = [
   {
+    name: "房貸繳完不等於房子歸你",
+    views: "40萬",
+    url: "https://www.instagram.com/reel/DaaLiPbx7FB/"
+  },
+  {
     name: "房東一定要知道的租屋四大新制",
     views: "34萬",
     url: "https://www.facebook.com/share/r/1BejFksdcH/"
-  },
-  {
-    name: "房貸繳完不等於房子歸你",
-    views: "26.6萬",
-    url: "https://www.facebook.com/share/v/1CEULtobNu/"
   },
   {
     name: "新屋為何沒瓦斯・保命設計揭秘",
