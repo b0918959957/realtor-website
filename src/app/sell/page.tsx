@@ -38,7 +38,7 @@ export default async function SellPage() {
             <p className="st-gate-eyebrow">暫停服務</p>
             <h1 className="st-gate-title">試算工具維護中</h1>
             <p className="st-gate-desc">
-              這個工具目前暫時關閉，請直接加 LINE 詢問小飛，我一樣可以幫你算。
+              這個工具目前暫時關閉，請直接加 LINE 詢問小飛，我一樣可以幫你算
             </p>
             <a
               className="btn btn-line st-gate-line"
@@ -51,7 +51,7 @@ export default async function SellPage() {
             <p className="st-gate-foot">
               劉羽菲（小飛）｜高屏房仲・專業房產顧問
               <br />
-              成交是結果，信任才是我的專業。
+              成交是結果，信任才是我的專業
             </p>
           </div>
         </div>

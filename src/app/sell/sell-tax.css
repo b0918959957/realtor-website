@@ -27,13 +27,28 @@
   color: var(--foresight-secondary-orange);
   margin-bottom: 10px;
 }
-.site-root .st-gate-title { font-size: 1.4rem; font-weight: 900; color: var(--foresight-primary-navy); }
-.site-root .st-gate-sub { margin-top: 8px; font-size: 0.94rem; color: var(--gray-700); font-weight: 700; }
+/* text-wrap: balance 讓瀏覽器把幾行排成一樣長，避免最後一行只剩一兩個字 */
+.site-root .st-gate-title {
+  font-size: 1.4rem;
+  font-weight: 900;
+  color: var(--foresight-primary-navy);
+  text-wrap: balance;
+  line-height: 1.45;
+}
+.site-root .st-gate-sub {
+  margin-top: 8px;
+  font-size: 0.94rem;
+  color: var(--gray-700);
+  font-weight: 700;
+  text-wrap: balance;
+  line-height: 1.7;
+}
 .site-root .st-gate-desc {
   margin-top: 18px;
   font-size: 0.9rem;
   color: var(--gray-700);
   line-height: 1.9;
+  text-wrap: balance;
 }
 .site-root .st-gate-form { margin-top: 20px; display: grid; gap: 10px; }
 .site-root .st-gate-form input {
@@ -62,6 +77,7 @@
   font-size: 0.76rem;
   color: var(--gray-500);
   line-height: 1.9;
+  text-wrap: balance;
 }
 
 /* ───────────────────────── Hero ─────────────────────────

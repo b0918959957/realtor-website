@@ -36,12 +36,12 @@ export default function SellGate({ lineUrl }: { lineUrl: string }) {
       <div className="st-gate-card">
         <p className="st-gate-eyebrow">限定工具</p>
         <h1 className="st-gate-title">小飛賣房稅費＆實拿試算</h1>
-        <p className="st-gate-sub">別只看賣多少，真正重要的是最後拿回多少。</p>
+        <p className="st-gate-sub">別只看賣多少，真正重要的是最後拿回多少</p>
 
         <p className="st-gate-desc">
-          這個工具需要通關密語，加入小飛 LINE 就能索取。
+          這個工具需要通關密語，加入小飛 LINE 就能索取
           <br />
-          已經有密語的話，直接輸入就可以開始試算。
+          已經有密語的話，直接輸入就可以開始試算
         </p>
 
         <form onSubmit={submit} className="st-gate-form">
@@ -67,7 +67,7 @@ export default function SellGate({ lineUrl }: { lineUrl: string }) {
         <p className="st-gate-foot">
           劉羽菲（小飛）｜高屏房仲・專業房產顧問
           <br />
-          成交是結果，信任才是我的專業。
+          成交是結果，信任才是我的專業
         </p>
       </div>
     </div>
