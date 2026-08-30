@@ -4,7 +4,7 @@ import Link from "next/link";
 import SellGate from "@/app/_components/SellGate";
 import SellTaxCalculator from "@/app/_components/SellTaxCalculator";
 import { PROFILE } from "@/lib/profile";
-import { GATE_COOKIE, verifyToken } from "@/lib/sell-gate";
+import { GATE_COOKIE, isGateConfigured, verifyToken } from "@/lib/sell-gate";
 import { DISCLAIMERS, TAX_RULES } from "@/lib/sell-tax-rules";
 import "../site.css";
 import "./sell-tax.css";
@@ -12,8 +12,8 @@ import "./sell-tax.css";
 const LINE_URL = PROFILE.social.line;
 
 /**
- * 這是不公開的工具頁：不上選單、不從首頁連過來、不讓搜尋引擎收錄。
- * 只有拿到網址＋通關密語的人可以使用。
+ * 需要通關密語的工具頁：不上選單、不讓搜尋引擎收錄。
+ * 2026-08-09 起首頁「房貸試算」區有入口，但仍需密語才進得去。
  */
 export const metadata: Metadata = {
   title: "小飛賣房稅費＆實拿試算",
@@ -29,6 +29,36 @@ export const metadata: Metadata = {
 export const dynamic = "force-dynamic";
 
 export default async function SellPage() {
+  // 沒設定 SELL_TOOL_PASSCODE 就整個關閉，不放行也不退回任何預設密碼
+  if (!isGateConfigured()) {
+    return (
+      <div className="site-root">
+        <div className="st-gate">
+          <div className="st-gate-card">
+            <p className="st-gate-eyebrow">暫停服務</p>
+            <h1 className="st-gate-title">試算工具維護中</h1>
+            <p className="st-gate-desc">
+              這個工具目前暫時關閉，請直接加 LINE 詢問小飛，我一樣可以幫你算。
+            </p>
+            <a
+              className="btn btn-line st-gate-line"
+              href={LINE_URL}
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              加 LINE 問小飛
+            </a>
+            <p className="st-gate-foot">
+              劉羽菲（小飛）｜高屏房仲・專業房產顧問
+              <br />
+              成交是結果，信任才是我的專業。
+            </p>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
   const store = await cookies();
   const authed = verifyToken(store.get(GATE_COOKIE)?.value);
 

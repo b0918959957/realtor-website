@@ -39,9 +39,9 @@ export default function SellGate({ lineUrl }: { lineUrl: string }) {
         <p className="st-gate-sub">別只看賣多少，真正重要的是最後拿回多少。</p>
 
         <p className="st-gate-desc">
-          這個工具沒有公開，只提供給加入小飛 LINE 的屋主使用。
+          這個工具需要通關密語，加入小飛 LINE 就能索取。
           <br />
-          請輸入通關密語，或先加 LINE 向小飛索取。
+          已經有密語的話，直接輸入就可以開始試算。
         </p>
 
         <form onSubmit={submit} className="st-gate-form">
