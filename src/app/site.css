@@ -2152,6 +2152,28 @@
   max-width: 620px;
 }
 
+/* 賣方入口：與買方入口區隔，用金色調並標示需要密碼 */
+.site-root .calc-upsell-sell {
+  margin-top: 14px;
+  background: linear-gradient(135deg, #6B4F16 0%, #8A6520 100%);
+}
+.site-root .calc-upsell-lock {
+  display: inline-block;
+  margin-left: 10px;
+  padding: 3px 10px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.18);
+  border: 1px solid rgba(255, 255, 255, 0.32);
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  vertical-align: middle;
+  white-space: nowrap;
+}
+@media (max-width: 640px) {
+  .site-root .calc-upsell-lock { display: block; margin: 8px 0 0; width: fit-content; }
+}
+
 /* 央行法規提示框 */
 .site-root .pa-rule-box {
   background: var(--lv-red-bg);

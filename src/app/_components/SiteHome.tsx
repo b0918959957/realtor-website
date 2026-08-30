@@ -722,6 +722,23 @@ export default function SiteHome() {
                 小飛買房貸款試算 →
               </Link>
             </div>
+
+            {/* 賣方入口。工具本身有密碼閘門，密碼要跟小飛索取 */}
+            <div className="calc-upsell calc-upsell-sell">
+              <div>
+                <p className="calc-upsell-title">
+                  要賣房？先算清楚「扣完稅費，實際能拿多少」
+                  <span className="calc-upsell-lock">屋主專用・需通關密語</span>
+                </p>
+                <p className="calc-upsell-desc">
+                  房地合一稅、土增稅、仲介費、代書費、清償費用一次算給你看，
+                  並列出不同賣價下的實拿金額。加 LINE 跟我要通關密語就能使用。
+                </p>
+              </div>
+              <Link className="btn btn-primary" href="/sell">
+                小飛賣房實拿試算 →
+              </Link>
+            </div>
           </div>
         </section>
 
