@@ -236,6 +236,11 @@ const PLATFORMS: { name: string; url?: string; key: string; icon: React.ReactNod
 /* kind 預設為影片；報導類請標 "article"，圖示才不會誤導成可以播放 */
 const INTERVIEWS: { title: string; url: string; kind?: "video" | "article" }[] = [
   {
+    title: "M傳媒專訪｜成交是結果，信任才是我的專業",
+    url: "https://94m.com.tw/articles/036d9b",
+    kind: "article"
+  },
+  {
     title: "屏東新聞報導",
     url: "https://www.facebook.com/share/1LsJRNKnyz/",
     kind: "article"
@@ -404,6 +409,12 @@ function StatNumber({ target }: { target: number }) {
   return <span className="stat-number" ref={ref}>{value}</span>;
 }
 
+const LETTER_QUOTES = [
+  { text: "有些錢，可以不賺。", from: "第五封｜妳可以很會賺錢，但不要什麼錢都賺" },
+  { text: "房子是拿來生活的。不是拿來證明「我成功了」。", from: "第十二封｜房子不是人生的畢業證書" },
+  { text: "專業不是什麼都知道。專業是知道什麼事情不能亂講。", from: "第二十三封｜不要怕說「我不知道」" },
+];
+
 export default function SiteHome() {
   const [navOpen, setNavOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
@@ -427,6 +438,7 @@ export default function SiteHome() {
           <nav className={`main-nav${navOpen ? " open" : ""}`}>
             <a href="#service-area" onClick={closeNav}>服務區域</a>
             <a href="#achievements" onClick={closeNav}>我的戰績</a>
+            <a href="#letters" onClick={closeNav}>38封信</a>
             <a href="#services" onClick={closeNav}>服務項目</a>
             <a href="#calculator" onClick={closeNav}>房貸試算</a>
             <a href="#contact" onClick={closeNav}>聯絡我</a>
@@ -674,6 +686,38 @@ export default function SiteHome() {
                   ))}
                 </div>
               </div>
+            </div>
+          </div>
+        </section>
+
+        {/* Letters：電子書《小飛給孩子的38封信》 */}
+        <section className="letters" id="letters">
+          <div className="container">
+            <div className="letters-card">
+              <div className="letters-intro">
+                <p className="section-eyebrow">LETTERS</p>
+                <h2 className="section-title">寫給女兒的 38 封信</h2>
+                <p className="section-desc">
+                  做房仲之前，我先是兩個女兒的媽媽。這些年走過的路、吃過的虧，還有我對錢、對房子、對做人的想法，我一封一封寫了下來。想知道我是怎麼樣的人，這裡比任何自我介紹都清楚。
+                </p>
+                <a
+                  className="btn btn-primary"
+                  href="https://xiaofei-38-letters.yufeihouse.workers.dev"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  📖 免費閱讀全書
+                </a>
+                <p className="letters-note">不用登入、不用下載，手機點開就能讀</p>
+              </div>
+              <ul className="letters-quotes">
+                {LETTER_QUOTES.map((q) => (
+                  <li key={q.from}>
+                    <p className="letters-quote">{q.text}</p>
+                    <p className="letters-from">{q.from}</p>
+                  </li>
+                ))}
+              </ul>
             </div>
           </div>
         </section>

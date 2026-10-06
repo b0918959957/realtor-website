@@ -2260,3 +2260,34 @@
   margin-top: -4px;
 }
 .site-root .pa-inline-note strong { color: var(--lv-yellow); font-weight: 800; }
+
+/* ── 38 封信：米白書頁卡，夾在深藍戰績與服務項目之間 ── */
+.site-root .letters { background: linear-gradient(160deg, #FFFDF7 0%, #FFF4E2 100%); }
+.site-root .letters-card {
+  display: grid;
+  grid-template-columns: 1.05fr 1fr;
+  gap: 56px;
+  align-items: center;
+}
+.site-root .letters .section-desc { margin-bottom: 30px; }
+.site-root .letters-note { margin-top: 14px; font-size: 0.9rem; color: var(--gray-700); }
+.site-root .letters-quotes { display: grid; gap: 18px; }
+.site-root .letters-quotes li {
+  background: #fff;
+  border-left: 4px solid var(--foresight-highlight-gold);
+  border-radius: var(--radius);
+  padding: 22px 26px;
+  box-shadow: var(--shadow-sm);
+}
+.site-root .letters-quote {
+  font-family: "Noto Serif TC", "Songti TC", serif;
+  font-size: 1.2rem;
+  font-weight: 600;
+  line-height: 1.7;
+  color: var(--foresight-primary-navy);
+}
+.site-root .letters-from { margin-top: 8px; font-size: 0.85rem; color: var(--gray-500); }
+@media (max-width: 860px) {
+  .site-root .letters-card { grid-template-columns: 1fr; gap: 36px; }
+  .site-root .letters-quote { font-size: 1.08rem; }
+}
